@@ -7,6 +7,9 @@ import prisma from '../lib/prisma';
 // index.tsx
 export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.user.findMany({
+    select: { id: true, 
+              name: true,
+              email: true },
     where: { id: 1 },
   });
   return { props: { feed } };
