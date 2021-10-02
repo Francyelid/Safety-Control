@@ -9,9 +9,6 @@ export const getStaticProps: GetStaticProps = async () => {
   const feed = await prisma.user.findMany({
     where: { id: 1 },
   });
-  feed[0].createdAt = '';
-  feed[0]['updatedAt'] = 'b';
-  
   return { props: { feed } };
 };
 

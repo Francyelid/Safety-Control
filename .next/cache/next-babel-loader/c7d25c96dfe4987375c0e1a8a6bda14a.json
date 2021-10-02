@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { PrismaClient } from \"@prisma/client\";\nconst prisma = global.prisma || new PrismaClient();\nglobal.prisma = prisma;\nexport default prisma;","map":null,"metadata":{},"sourceType":"module"}
