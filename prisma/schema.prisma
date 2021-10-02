@@ -1,0 +1,37 @@
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int       @default(autoincrement()) @id
+  name          String?
+  email         String?   @unique
+  password      String?
+  type          Int       
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+}
+
+model Epis {
+  id            Int       @default(autoincrement()) @id
+  name          String?   @unique
+  description   String? 
+  controls      Control[]
+}
+
+model Control {
+  id            Int       @default(autoincrement()) @id
+  epi           Epis      @relation(fields: [epi_id], references: [id])
+  epi_id        Int       
+  description   String?   
+  start_date    DateTime  @default(now()) @map(name: "start_date")
+  end_date      DateTime
+  start_image   String?
+  end_image     String?
+}
