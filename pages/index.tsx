@@ -1,4 +1,4 @@
-import Head from 'next/head';
+/*import Head from 'next/head';
 import fetch from 'isomorphic-unfetch';
 import useSWR from 'swr';
 import Link from 'next/link';
@@ -30,6 +30,7 @@ function Home() {
         <title>Welcome to landing page</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      
       <h1>Simplest login</h1>
 
       <h2>Proudly using Next.js, Mongodb and deployed with Now</h2>
@@ -55,7 +56,16 @@ function Home() {
   );
 }
 
-export default Home;
+export default Home;*/
+import React from "react";
+
+import Routes from "./_routes";
+
+const App = () => {
+  return <Routes />;
+};
+
+export default App;
 
 
 /*import React from "react"

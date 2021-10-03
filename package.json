@@ -1,5 +1,5 @@
 {
-  "name": "hello-next",
+  "name": "SafetyControl",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^3.1.1",
+    "awesome-react-icons": "^1.4.8",
     "bcrypt": "^5.0.1",
     "g": "^2.0.1",
     "isomorphic-unfetch": "^3.1.0",
@@ -21,6 +22,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-markdown": "5.0.2",
+    "react-minimal-side-navigation": "^1.9.2",
     "swr": "^1.0.1",
     "yarn": "^1.22.15"
   },

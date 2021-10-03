@@ -1,4 +1,35 @@
-import React, { ReactNode } from "react";
+
+import React from "react";
+
+import { NavSidebar } from "./NavSidebar";
+import BodyWrapper from "./BodyWrapper";
+
+export const DashboardLayout = ({ children }) => {
+  return (
+    <BodyWrapper>
+      <div className="flex h-screen bg-gray-200">
+        <NavSidebar />
+
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <main className="content">
+            <section className="sm:flex-row flex flex-col flex-1">
+              <div
+                className="content-box"
+                style={{ flexGrow: 2, flexBasis: "0%" }}
+              >
+                {children}
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+    </BodyWrapper>
+  );
+};
+
+
+
+/*import React, { ReactNode } from "react";
 import Header from "./Header";
 
 type Props = {
@@ -47,4 +78,4 @@ const Layout: React.FC<Props> = (props) => (
   </div>
 );
 
-export default Layout;
+export default Layout;*/
