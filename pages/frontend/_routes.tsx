@@ -7,15 +7,22 @@ import MembersPage from "./members";
 import AboutPage from "./about";
 import TeamsPage from "./teams";
 import HomePage from "./home";
+import LoginPage from "./login";
 
 const Routes = () => {
   return (
     
-      <ul> <li>
-      <Link href="/home">
-        <HomePage />
-      </Link>
-    </li>
+    <ul> 
+      <li>
+        <Link href="/login">
+          <LoginPage />
+        </Link>
+      </li>
+      <li>
+        <Link href="/home">
+          <HomePage />
+        </Link>
+      </li>
       <li>
         <Link href="/about/members">
           <MembersPage />
@@ -38,7 +45,7 @@ const Routes = () => {
       </li>
       <li>
         <Link href="/settings">
-        <SettingsPage />
+          <SettingsPage />
         </Link>
       </li>
     </ul>

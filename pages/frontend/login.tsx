@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Router from 'next/router';
 import cookie from 'js-cookie';
 
-const Login = () => {
+const LoginPage = () => {
   const [loginError, setLoginError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

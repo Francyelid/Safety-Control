@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {DashboardLayout} from '../components/Layout';
+import {DashboardLayout} from '../../components/Layout';
 
 const HomePage = () => {
   return (
@@ -11,3 +11,4 @@ const HomePage = () => {
 }
 
 export default HomePage;
+
