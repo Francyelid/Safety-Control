@@ -61,35 +61,35 @@ export const NavSidebar = () => {
           items={[
             {
               title: "Home",
-              itemId: "/home",
+              itemId: "/frontend/home",
               // Optional
               elemBefore: () => <Icon name="coffee" />
             },
             {
               title: "About",
-              itemId: "/about",
+              itemId: "/frontend/about",
               elemBefore: () => <Icon name="user" />,
               subNav: [
                 {
                   title: "Projects",
-                  itemId: "/about/projects",
+                  itemId: "/frontend/projects",
                   // Optional
                   elemBefore: () => <Icon name="cloud-snow" />
                 },
                 {
                   title: "Members",
-                  itemId: "/about/members",
+                  itemId: "/frontend/members",
                   elemBefore: () => <Icon name="coffee" />
                 }
               ]
             },
             {
               title: "Another Tab",
-              itemId: "/another",
+              itemId: "/frontend/another",
               subNav: [
                 {
                   title: "Teams",
-                  itemId: "/another/teams"
+                  itemId: "/frontend/teams"
                   // Optional
                   // elemBefore: () => <Icon name="calendar" />
                 }
@@ -104,7 +104,7 @@ export const NavSidebar = () => {
             items={[
               {
                 title: "Settings",
-                itemId: "/settings",
+                itemId: "/frontend/settings",
                 elemBefore: () => <Icon name="activity" />
               }
             ]}
