@@ -12,11 +12,16 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^3.1.1",
+    "bcrypt": "^5.0.1",
     "g": "^2.0.1",
+    "isomorphic-unfetch": "^3.1.0",
+    "js-cookie": "^3.0.1",
+    "jsonwebtoken": "^8.5.1",
     "next": "^9.5.5",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-markdown": "5.0.2",
+    "swr": "^1.0.1",
     "yarn": "^1.22.15"
   },
   "devDependencies": {
