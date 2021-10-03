@@ -1,9 +1,12 @@
 /* eslint-disable react/display-name, jsx-a11y/click-events-have-key-events */
 import { Navigation } from "../node_modules/react-minimal-side-navigation";
 //import { useHistory, useLocation } from "react-router-dom";
-import { useRouter } from 'next/router'
+import {  useRouter } from 'next/router'
+import Router from 'next/router'
 import Icon from "awesome-react-icons";
 import React, { useState } from "react";
+import useSWR from 'swr';
+import cookie from 'js-cookie';
 
 import "react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css";
 
@@ -12,6 +15,27 @@ export const NavSidebar = () => {
   //const location = useLocation();
   const router = useRouter()
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  let {data, error, mutate} = useSWR('/api/me', async function(args) {
+    const res = await fetch(args);
+    return res.json();
+  });
+
+  function Logout() {      
+      console.log('logout')   
+      console.log(data) 
+      cookie.remove('token');
+      mutate(data,true)
+      console.log('aqui')
+      console.log(data) 
+      Router.push('/frontend/login');
+  };
+
+  if (!data) return <h1>Loading...</h1>;
+  let loggedIn = false;
+  if (data.email) {
+    loggedIn = true;
+  }
 
   return (
     <React.Fragment>
@@ -103,14 +127,15 @@ export const NavSidebar = () => {
             activeItemId={router.pathname}
             items={[
               {
-                title: "Settings",
-                itemId: "/frontend/settings",
+                title: "Logout",
+                itemId: "/frontend/login",
                 elemBefore: () => <Icon name="activity" />
               }
             ]}
             onSelect={({ itemId }) => {
               //history.push(itemId);
-              router.push(itemId)
+              //router.push(itemId)
+              Logout()
             }}
           />
         </div>

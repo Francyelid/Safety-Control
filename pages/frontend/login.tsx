@@ -10,7 +10,7 @@ const LoginPage = () => {
   function handleSubmit(e) {
     e.preventDefault();
     //call api
-    fetch('api/auth', {
+    fetch('../api/auth', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
