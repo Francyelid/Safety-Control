@@ -47,12 +47,6 @@ export const NavSidebar = () => {
         }`}
       />
 
-      <div className="absolute right-0">
-        <a href="https://github.com/abhijithvijayan/react-minimal-side-navigation">
-          View on GitHub
-        </a>
-      </div>
-
       <div>
         <button
           className="btn-menu"
@@ -69,12 +63,6 @@ export const NavSidebar = () => {
           isSidebarOpen ? "ease-out translate-x-0" : "ease-in -translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-center mt-10 text-center py-6">
-          <span className="mx-2 text-2xl font-semibold text-black">
-            react-minimal-side-navigation
-          </span>
-        </div>
-
         {/* https://github.com/abhijithvijayan/react-minimal-side-navigation */}
         <Navigation
           activeItemId={router.pathname}

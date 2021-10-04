@@ -3,9 +3,32 @@ import React from "react";
 
 import { NavSidebar } from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
+import { Button, AppBar, Toolbar, IconButton, Typography, Avatar } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu"
 
 export const DashboardLayout = ({ children }) => {
   return (
+    <>
+    <div>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+      <AppBar>
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Safety Control
+            </Typography>
+            <Avatar>K</Avatar>
+          </Toolbar>
+      </AppBar>
+    </div>
     <BodyWrapper>
       <div className="flex h-screen bg-gray-200">
         <NavSidebar />
@@ -24,6 +47,7 @@ export const DashboardLayout = ({ children }) => {
         </div>
       </div>
     </BodyWrapper>
+    </>
   );
 };
 
