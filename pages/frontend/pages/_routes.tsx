@@ -6,7 +6,7 @@ import LoginPage from "./login";
 import SettingsPage from "./settings";
 import ProjectsPage from "./projects";
 import MembersPage from "./members";
-import AboutPage from "./about";
+import DashboardPage from "./dashboard";
 import TeamsPage from "./teams";
 import HomePage from "./home";
 
@@ -31,8 +31,8 @@ const Routes = () => {
         </Link>
       </li>
       <li>
-        <Link href="/frontend/pages/about">
-          <AboutPage />
+        <Link href="/frontend/pages/dashboard">
+          <DashboardPage />
         </Link>
       </li>
       <li>

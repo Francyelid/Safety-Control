@@ -78,8 +78,8 @@ export const NavSidebar = () => {
               elemBefore: () => <Icon name="coffee" />
             },
             {
-              title: "About",
-              itemId: "/frontend/pages/about",
+              title: "Dashboard",
+              itemId: "/frontend/pages/dashboard",
               elemBefore: () => <Icon name="user" />,
               subNav: [
                 {
