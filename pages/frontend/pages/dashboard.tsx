@@ -176,10 +176,8 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     return (
       <DashboardLayout>
         <div className="page">
-        <Component/>
-        <ComponentColuna/>
-        <h1>Public Feed</h1>
-
+          <Component/>
+          <ComponentColuna/>
         <main>
         
         </main>
