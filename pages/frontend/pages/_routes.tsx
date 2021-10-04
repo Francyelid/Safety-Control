@@ -21,32 +21,32 @@ const Routes = () => {
         </Link>
       </li>
       <li>
-        <Link href="/frontend/home">
+        <Link href="/frontend/pages/home">
           <HomePage />
         </Link>
       </li>
       <li>
-        <Link href="/frontend/members">
+        <Link href="/frontend/pages/members">
           <MembersPage />
         </Link>
       </li>
       <li>
-        <Link href="/frontend/about">
+        <Link href="/frontend/pages/about">
           <AboutPage />
         </Link>
       </li>
       <li>
-        <Link href="/frontend/projects">
+        <Link href="/frontend/pages/projects">
           <ProjectsPage />
         </Link>
       </li>
       <li>
-        <Link href="/frontend/teams">
+        <Link href="/frontend/pages/teams">
         <TeamsPage />
         </Link>
       </li>
       <li>
-        <Link href="/frontend/settings">
+        <Link href="/frontend/pages/settings">
           <SettingsPage />
         </Link>
       </li>

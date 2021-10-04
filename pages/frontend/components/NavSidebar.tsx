@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name, jsx-a11y/click-events-have-key-events */
-import { Navigation } from "../node_modules/react-minimal-side-navigation";
+import { Navigation } from "../../../node_modules/react-minimal-side-navigation";
 //import { useHistory, useLocation } from "react-router-dom";
 import {  useRouter } from 'next/router'
 import Router from 'next/router'
@@ -16,7 +16,7 @@ export const NavSidebar = () => {
   const router = useRouter()
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  let {data, error, mutate} = useSWR('/api/me', async function(args) {
+  let {data, error, mutate} = useSWR('../../api/me', async function(args) {
     const res = await fetch(args);
     return res.json();
   });
@@ -28,7 +28,7 @@ export const NavSidebar = () => {
       mutate(data,true)
       console.log('aqui')
       console.log(data) 
-      Router.push('/frontend/login');
+      Router.push('/frontend/pages/login');
   };
 
   if (!data) return <h1>Loading...</h1>;
@@ -85,35 +85,35 @@ export const NavSidebar = () => {
           items={[
             {
               title: "Home",
-              itemId: "/frontend/home",
+              itemId: "/frontend/pages/home",
               // Optional
               elemBefore: () => <Icon name="coffee" />
             },
             {
               title: "About",
-              itemId: "/frontend/about",
+              itemId: "/frontend/pages/about",
               elemBefore: () => <Icon name="user" />,
               subNav: [
                 {
                   title: "Projects",
-                  itemId: "/frontend/projects",
+                  itemId: "/frontend/pages/projects",
                   // Optional
                   elemBefore: () => <Icon name="cloud-snow" />
                 },
                 {
                   title: "Members",
-                  itemId: "/frontend/members",
+                  itemId: "/frontend/pages/members",
                   elemBefore: () => <Icon name="coffee" />
                 }
               ]
             },
             {
               title: "Another Tab",
-              itemId: "/frontend/another",
+              itemId: "/frontend/pages/another",
               subNav: [
                 {
                   title: "Teams",
-                  itemId: "/frontend/teams"
+                  itemId: "/frontend/pages/teams"
                   // Optional
                   // elemBefore: () => <Icon name="calendar" />
                 }
@@ -128,7 +128,7 @@ export const NavSidebar = () => {
             items={[
               {
                 title: "Logout",
-                itemId: "/frontend/login",
+                itemId: "/frontend/pages/login",
                 elemBefore: () => <Icon name="activity" />
               }
             ]}
