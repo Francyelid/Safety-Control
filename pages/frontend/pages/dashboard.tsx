@@ -1,5 +1,5 @@
 import React from 'react';
-import {DashboardLayout} from '../components/Layout';
+import DashboardLayout from '../components/Layout';
 import { GetStaticProps } from "next"
 import Post, { PostProps } from "../components/Post"
 import Chart from "react-google-charts";

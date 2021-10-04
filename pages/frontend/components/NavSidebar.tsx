@@ -10,7 +10,7 @@ import cookie from 'js-cookie';
 
 import "react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css";
 
-export const NavSidebar = () => {
+const NavSidebar = () => {
   //const history = useHistory();
   //const location = useLocation();
   const router = useRouter()
@@ -131,3 +131,5 @@ export const NavSidebar = () => {
     </React.Fragment>
   );
 };
+
+export default NavSidebar;

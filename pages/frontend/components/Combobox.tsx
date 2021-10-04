@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/core/Autocomplete';
   
 
-const Combobox = ({}) => {
+const Combobox = () => {
   
   // Our sample dropdown options
   const options = ['Monday', 'Tuesday', 'Thursday', 

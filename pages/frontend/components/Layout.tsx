@@ -1,12 +1,12 @@
 
 import React from "react";
 
-import { NavSidebar } from "./NavSidebar";
+import NavSidebar from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
 import { Button, AppBar, Toolbar, IconButton, Typography, Avatar } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu"
 
-export const DashboardLayout = ({ children }) => {
+const Layout = ({ children }) => {
   return (
     <>
     <div>
@@ -51,7 +51,7 @@ export const DashboardLayout = ({ children }) => {
   );
 };
 
-
+export default Layout;
 
 /*import React, { ReactNode } from "react";
 import Header from "./Header";
