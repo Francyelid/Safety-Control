@@ -1,12 +1,12 @@
 import { AppProps } from "next/app";
 import "./styles.css";
-import {Button, ThemeProvider, createTheme} from '@material-ui/core';
-import { orange } from "@material-ui/core/colors";
+import { ThemeProvider, createTheme} from '@material-ui/core';
 
 const App = ({ Component, pageProps }: AppProps) => {
 
   const theme = createTheme({
     palette:{
+      mode:'dark',
       primary:{
         main: '#6E4582'
       },
@@ -15,7 +15,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       }
     }
   });
-
+  
   return (
     <ThemeProvider theme={theme}>
       <Component {...pageProps} />

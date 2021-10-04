@@ -34,7 +34,7 @@ export default (req, res) => {
       assert.notEqual(null, req.body.password, 'Password required');
     } catch (bodyError) {
       res.status(403).send(bodyError.message);
-    }
+    }debugger;
       console.log('chegada do auth');
       const email_rec = req.body.email;
       const password_rec  = req.body.password;
