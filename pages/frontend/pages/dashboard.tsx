@@ -1,13 +1,13 @@
 import React from 'react';
 import DashboardLayout from '../components/Layout';
 import { GetStaticProps } from "next"
-import Post, { PostProps } from "../components/Post"
 import Chart from "react-google-charts";
 import { generateKeyPair } from "crypto";
 import { type } from "os";
 import { renderers } from "react-markdown";
 
-
+import Combobox from '../components/Combobox';
+import { title } from 'process';
 
 const generateData = () => {
   var randomNumber1 = Math.floor(Math.random() * 20) + 1;
@@ -171,30 +171,24 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
 }
 
 
+  // Our sample dropdown options
+  const optionsArray = ['Monday', 'Tuesday', 'Thursday', 
+  'Friday', 'Saturday', 'Sunday']
+
 
   const Dashboard = () => {
     return (
       <DashboardLayout>
         <div className="page">
           <Component/>
+          <Combobox title={"teste"} options={optionsArray}/>
           <ComponentColuna/>
         <main>
         
         </main>
       </div>
       <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
+      
       `}</style>
       </DashboardLayout>
     )

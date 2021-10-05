@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {DashboardLayout} from '../components/Layout';
+import DashboardLayout from '../components/Layout';
 
 const MembersPage = () => {
   return (
