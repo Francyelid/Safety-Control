@@ -184,7 +184,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     return (
       <DashboardLayout>
         <div className="page">
-          <div className="">
+          <div className="topbox">
             <div>
               <Component/>
             </div>
@@ -194,43 +194,43 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
               <Combobox title={"teste"} options={optionsArray}/>
             </div>
           </div>
-          <div>
+          <div className="botbox">
             <div>
-            <ComponentColuna/>
+              <ComponentColuna/>
             </div>
             <div>
               <div>
-              <button
-                className="btn-menu"
-                onClick={() => teste()}
-                type="button"
-              >
-                <Icon name="instagram" className="w-6 h-6" />
-              </button>
                 <button
-                className="btn-menu"
-                onClick={() => teste()}
-                type="button"
-              >
-                <Icon name="instagram" className="w-6 h-6" />
-              </button>
-              </div>
-              <div>
-              <button
-                className="btn-menu"
-                onClick={() => teste()}
-                type="button"
-              >
-            
-                <Icon name="instagram" className="w-6 h-6" />
-              </button>
-              <button
-                className="btn-menu"
-                onClick={() => teste()}
-                type="button"
-              >
-                <Icon name="instagram" className="w-6 h-6" />
-              </button>
+                  className="btn-menu"
+                  onClick={() => teste()}
+                  type="button"
+                >
+                  <Icon name="instagram" className="w-6 h-6" />
+                </button>
+                  <button
+                  className="btn-menu"
+                  onClick={() => teste()}
+                  type="button"
+                >
+                  <Icon name="instagram" className="w-6 h-6" />
+                </button>
+                </div>
+                <div>
+                <button
+                  className="btn-menu"
+                  onClick={() => teste()}
+                  type="button"
+                >
+              
+                  <Icon name="instagram" className="w-6 h-6" />
+                </button>
+                <button
+                  className="btn-menu"
+                  onClick={() => teste()}
+                  type="button"
+                >
+                  <Icon name="instagram" className="w-6 h-6" />
+                </button>
               </div>
             </div>
           </div>
@@ -241,7 +241,21 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
         </main>
       </div>
       <style jsx>{`
-      
+        .topbox{
+          display: flex;
+          flex-direction: row; 
+        }
+        .botbox{
+          display: flex;
+          flex-direction: row; 
+        }
+        button{
+          background: red;
+        }
+        page{
+          display: flex;
+          flex-direction: collumn;
+        }
       `}</style>
       </DashboardLayout>
     )
