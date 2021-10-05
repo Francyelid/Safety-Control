@@ -1,6 +1,6 @@
-import React from 'react'
-import TextField from '@material-ui/core/TextField';
+import React from 'react';
 import Autocomplete from '@material-ui/core/Autocomplete';
+import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
   
 
 const Combobox = (props) => {
@@ -8,7 +8,7 @@ const Combobox = (props) => {
 
   
   return (
-    <div style={{marginLeft:'40%', marginTop: '60px'}}>
+    <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{height:"100%", width:"100%"}}>
       <h3>{props.title}</h3>
       <Autocomplete
         options={props.options}
@@ -16,7 +16,7 @@ const Combobox = (props) => {
         renderInput={(params) =>
           <TextField {...params} label="Combo box" variant="outlined" />}
       />
-    </div>
+    </Grid>
   );
 }
   

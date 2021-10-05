@@ -6,10 +6,11 @@ import { generateKeyPair } from "crypto";
 import { type } from "os";
 import { renderers } from "react-markdown";
 
-import Icon from "awesome-react-icons";
-
 import Combobox from '../components/Combobox';
 import { title } from 'process';
+
+import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
+import { Description, DescriptionOutlined, DescriptionRounded, DescriptionTwoTone } from '@material-ui/icons'
 
 const generateData = () => {
   var randomNumber1 = Math.floor(Math.random() * 20) + 1;
@@ -25,6 +26,25 @@ const generateData = () => {
     [randomNumber1, randomNumber2],[randomNumber3, randomNumber4],
     [randomNumber5, randomNumber6],[randomNumber7, randomNumber8],[randomNumber9, randomNumber3],[randomNumber2, randomNumber1]
   ];
+}
+
+function Item(props: BoxProps) {
+  const { sx, ...other } = props;
+  return (
+    <Box
+      sx={{
+        height:"90%",
+        bgcolor: 'primary.main',
+        color: 'white',
+        p: 1,
+        borderRadius: 1,
+        textAlign: 'center',
+        fontSize: 19,
+        ...sx,
+      }}
+      {...other}
+    />
+  );
 }
 
 class Component extends React.Component<{}, { chartData: (string[] | number[])[] }> {
@@ -45,14 +65,10 @@ class Component extends React.Component<{}, { chartData: (string[] | number[])[]
     }, 3000)
   }
 
-
-
-
   render () {
     return (
-      <Chart
-        width={'700px'}
-        height={'700px'}
+      <Chart 
+        height="35vh"
         chartType="ScatterChart"
         loader={<div>Loading Chart</div>}
         data={this.state.chartData}
@@ -86,11 +102,6 @@ class Component extends React.Component<{}, { chartData: (string[] | number[])[]
       />
     )
   }
-   
-
-       
-    
-  
 }
 
 
@@ -131,14 +142,10 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     }, 1500)
   }
 
-
-
-
   render () {
     return (
       <Chart
-  width={'500px'}
-  height={'300px'}
+  height="35vh"
   chartType="Bar"
   loader={<div>Loading Chart</div>}
   data={this.state.chartData}
@@ -165,11 +172,6 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
      
     )
   }
-   
-
-       
-    
-  
 }
 
 
@@ -177,86 +179,53 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   const optionsArray = ['Monday', 'Tuesday', 'Thursday', 
   'Friday', 'Saturday', 'Sunday']
   const teste = function (){
-    
+    alert("!");
   }
 
   const Dashboard = () => {
     return (
       <DashboardLayout>
-        <div className="page">
-          <div className="topbox">
-            <div>
-              <Component/>
-            </div>
-            <div>
-              <Combobox title={"teste"} options={optionsArray}/>
-              <Combobox title={"teste"} options={optionsArray}/>
-              <Combobox title={"teste"} options={optionsArray}/>
-            </div>
-          </div>
-          <div className="botbox">
-            <div>
-              <ComponentColuna/>
-            </div>
-            <div>
-              <div>
-                <button
-                  className="btn-menu"
-                  onClick={() => teste()}
-                  type="button"
-                >
-                  <Icon name="instagram" className="w-6 h-6" />
-                </button>
-                  <button
-                  className="btn-menu"
-                  onClick={() => teste()}
-                  type="button"
-                >
-                  <Icon name="instagram" className="w-6 h-6" />
-                </button>
-                </div>
-                <div>
-                <button
-                  className="btn-menu"
-                  onClick={() => teste()}
-                  type="button"
-                >
-              
-                  <Icon name="instagram" className="w-6 h-6" />
-                </button>
-                <button
-                  className="btn-menu"
-                  onClick={() => teste()}
-                  type="button"
-                >
-                  <Icon name="instagram" className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          
-        <main>
-        
-        </main>
-      </div>
-      <style jsx>{`
-        .topbox{
-          display: flex;
-          flex-direction: row; 
-        }
-        .botbox{
-          display: flex;
-          flex-direction: row; 
-        }
-        button{
-          background: red;
-        }
-        page{
-          display: flex;
-          flex-direction: collumn;
-        }
-      `}</style>
+        <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%"}}>
+            <Box sx={{display:'grid',  minWidth:"100%"}}>
+              <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', minHeight:"100%", minWidth:"100%"}}>
+                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                  <div>
+                    <Component/>
+                  </div>
+                </Item>
+                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                  <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
+                    <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
+                      <Item>
+                        <Combobox title={"teste"} options={optionsArray}/>
+                      </Item>
+                      <Item>
+                        <Combobox title={"teste"} options={optionsArray}/>
+                      </Item>
+                        <Item>
+                        <Combobox title={"teste"} options={optionsArray}/>
+                      </Item>
+                    </Box>
+                  </Grid>
+                </Item>
+                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                  <div>
+                    <ComponentColuna/>
+                  </div>
+                </Item>
+                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                  <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{ height:"100%", width:"100%"}}>
+                    <Box sx={{display:'grid', minHeight:"100%", minWidth:"100%", gridTemplateColumns: 'repeat(2, 1fr)', marginTop:"5vh",  marginLeft:"2vw"}}>
+                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><Description sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
+                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
+                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionTwoTone sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
+                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionRounded sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
+                    </Box>
+                  </Grid>
+                </Item>
+              </Box>
+            </Box>
+        </Grid>
       </DashboardLayout>
     )
   }
