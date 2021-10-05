@@ -75,13 +75,13 @@ const NavSidebar = () => {
               title: "Home",
               itemId: "/frontend/pages/home",
               // Optional
-              elemBefore: () => <Icon name="coffee" />
+              elemBefore: () => <Icon name="heart" />
             },
             {
               title: "Dashboard",
               itemId: "/frontend/pages/dashboard",
-              elemBefore: () => <Icon name="user" />,
-              subNav: [
+              elemBefore: () => <Icon name="calendar" />,
+              /*subNav: [
                 {
                   title: "Projects",
                   itemId: "/frontend/pages/projects",
@@ -93,19 +93,20 @@ const NavSidebar = () => {
                   itemId: "/frontend/pages/members",
                   elemBefore: () => <Icon name="coffee" />
                 }
-              ]
+              ]*/
             },
             {
-              title: "Another Tab",
-              itemId: "/frontend/pages/another",
-              subNav: [
+              title: "Ocorrências",
+              itemId: "/frontend/pages/event",
+              elemBefore: () => <Icon name="check-circle" />,
+              /*subNav: [
                 {
                   title: "Teams",
                   itemId: "/frontend/pages/teams"
                   // Optional
                   // elemBefore: () => <Icon name="calendar" />
                 }
-              ]
+              ]*/
             }
           ]}
         />
