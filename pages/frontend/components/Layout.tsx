@@ -1,11 +1,105 @@
-
-import React from "react";
+import React, {useState} from "react";
 import NavSidebar from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
-import { Button, AppBar, Toolbar, IconButton, Typography, Avatar, Box } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu"
+import { Button, AppBar,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider} from "@material-ui/core";
+import MenuIcon  from "@material-ui/icons/Menu";
+import  {Mail, Inbox} from "@material-ui/icons";
+import useSWR from 'swr';
+import cookie from 'js-cookie';
+import Router from 'next/router';
 
 const Layout = ({ children }) => {
+  const [state, setStateDrawer] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const toggleDrawer =
+    (open: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+
+      setStateDrawer(!state);
+    };
+
+    const handleListItemClick = (
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+      index: number,
+    ) => {
+      setSelectedIndex(index);
+    };
+
+  let {data, error, mutate} = useSWR('../../api/me', async function(args) {
+    const res = await fetch(args);
+    return res.json();
+  });
+
+  function ChangePage(url){
+    Router.push(url);
+  }
+  
+  function Logout() {      
+    console.log('logout')   
+    console.log(data) 
+    cookie.remove('token');
+    mutate(data,true)
+    console.log('aqui')
+    console.log(data) 
+    Router.push('/frontend/pages/login');
+  };
+
+  const list = () => (
+    <Box
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <List>
+          <ListItem key={"home"}>
+            <ListItemButton selected={selectedIndex === 0} onClick={(e)=>{ ChangePage("/frontend/pages/home");handleListItemClick(e, 0); }}>
+              <ListItemIcon>
+                <Inbox />
+              </ListItemIcon>
+              <ListItemText primary={"Home"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={"Dashboard"}>
+            <ListItemButton selected={selectedIndex === 1} onClick={(e)=>{ ChangePage("/frontend/pages/dashboard");handleListItemClick(e, 1); }}>
+              <ListItemIcon>
+                <Inbox />
+              </ListItemIcon>
+              <ListItemText primary={"Dashboard"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={"Ocorrencias"}>
+            <ListItemButton selected={selectedIndex === 2} onClick={(e)=>{ ChangePage("/frontend/pages/event");handleListItemClick(e, 2); }}>
+              <ListItemIcon>
+                <Inbox />
+              </ListItemIcon>
+              <ListItemText primary={"Ocorrências"} />
+            </ListItemButton>
+          </ListItem>
+      </List>
+      <Divider />
+      <List className="absolute bottom-0 w-full my-8">
+          <ListItem key="Logout">
+            <ListItemButton selected={selectedIndex === 5}  onClick={(e)=>{Logout();handleListItemClick(e, 5)}}> 
+              <ListItemIcon>
+                <Mail />
+              </ListItemIcon>
+              <ListItemText primary={"Logout"} />
+            </ListItemButton>
+          </ListItem>
+      </List>
+    </Box>
+  );
+
+
+
   return (
     <Box style={{height:"100vh", background:"#6E4582"}}>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
@@ -17,16 +111,25 @@ const Layout = ({ children }) => {
             edge="start"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick={toggleDrawer(true)}
           >
             <MenuIcon />
           </IconButton>
+
+          <Drawer
+            anchor="left"
+            open={state}
+            onClose={toggleDrawer(false)}
+          >
+            {list()}
+          </Drawer>
+
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} color="white">
             Safety Control
           </Typography>
           <Avatar>K</Avatar>
         </Toolbar>
         <Box className="flex" style={{height:"90vh", background:"#6E4582"}}>
-          <NavSidebar />
           <Box style={{height:"90vh",width:"95%", paddingTop:"10vh", paddingLeft:"3%"}}>
             <div
               className="content-box"
