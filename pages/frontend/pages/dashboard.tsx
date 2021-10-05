@@ -6,6 +6,8 @@ import { generateKeyPair } from "crypto";
 import { type } from "os";
 import { renderers } from "react-markdown";
 
+import Icon from "awesome-react-icons";
+
 import Combobox from '../components/Combobox';
 import { title } from 'process';
 
@@ -174,15 +176,66 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   // Our sample dropdown options
   const optionsArray = ['Monday', 'Tuesday', 'Thursday', 
   'Friday', 'Saturday', 'Sunday']
-
+  const teste = function (){
+    
+  }
 
   const Dashboard = () => {
     return (
       <DashboardLayout>
         <div className="page">
-          <Component/>
-          <Combobox title={"teste"} options={optionsArray}/>
-          <ComponentColuna/>
+          <div className="">
+            <div>
+              <Component/>
+            </div>
+            <div>
+              <Combobox title={"teste"} options={optionsArray}/>
+              <Combobox title={"teste"} options={optionsArray}/>
+              <Combobox title={"teste"} options={optionsArray}/>
+            </div>
+          </div>
+          <div>
+            <div>
+            <ComponentColuna/>
+            </div>
+            <div>
+              <div>
+              <button
+                className="btn-menu"
+                onClick={() => teste()}
+                type="button"
+              >
+                <Icon name="instagram" className="w-6 h-6" />
+              </button>
+                <button
+                className="btn-menu"
+                onClick={() => teste()}
+                type="button"
+              >
+                <Icon name="instagram" className="w-6 h-6" />
+              </button>
+              </div>
+              <div>
+              <button
+                className="btn-menu"
+                onClick={() => teste()}
+                type="button"
+              >
+            
+                <Icon name="instagram" className="w-6 h-6" />
+              </button>
+              <button
+                className="btn-menu"
+                onClick={() => teste()}
+                type="button"
+              >
+                <Icon name="instagram" className="w-6 h-6" />
+              </button>
+              </div>
+            </div>
+          </div>
+          
+          
         <main>
         
         </main>
