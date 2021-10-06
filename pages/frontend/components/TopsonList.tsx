@@ -87,7 +87,7 @@ const columns = [
     };
   
     return (
-      <Paper sx={{ width: "100%", overflow: "hidden", right: "1.5%", position: 'relative',}}>
+      <Paper sx={{ width: "100%", overflow: "hidden", position: 'relative',}}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -112,7 +112,7 @@ const columns = [
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.code}
+                      key={row.epi}
                       onClick={function () {
                         handleOpen();
                       }}
