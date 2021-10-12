@@ -9,60 +9,74 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
+import Backdrop from '@material-ui/core/Backdrop';
+import Box from '@material-ui/core/Box';
+import Modal from '@material-ui/core/Modal';
+import Fade from '@material-ui/core/Fade';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const columns = [
-    { id: "name", label: "Name", minWidth: 170 },
-    { id: "code", label: "ISO\u00a0Code", minWidth: 100 },
+    { id: "epi", label: "EPI", minWidth: 170 },
+    { id: "description", label: "Descrição", minWidth: 100 },
     {
-      id: "population",
-      label: "Population",
+      id: "start_date",
+      label: "Data de Início",
       minWidth: 170,
       align: "right",
-      format: (value) => value.toLocaleString("en-US")
+      format: (value) => value.toString()
     },
     {
-      id: "size",
-      label: "Size\u00a0(km\u00b2)",
+      id: "end_date",
+      label: "Data Final",
       minWidth: 170,
       align: "right",
-      format: (value) => value.toLocaleString("en-US")
-    },
-    {
-      id: "density",
-      label: "Density",
-      minWidth: 170,
-      align: "right",
-      format: (value) => value.toFixed(2)
+      format: (value) => value.toString()
     }
   ];
   
-  function createData(name, code, population, size) {
-    const density = population / size;
-    return { name, code, population, size, density };
+  function createData(epi, description, start_date, end_date) {
+    return { epi, description, start_date, end_date };
   }
   
   const rows = [
-    createData("India", "IN", 1324171354, 3287263),
-    createData("China", "CN", 1403500365, 9596961),
-    createData("Italy", "IT", 60483973, 301340),
-    createData("United States", "US", 327167434, 9833520),
-    createData("Canada", "CA", 37602103, 9984670),
-    createData("Australia", "AU", 25475400, 7692024),
-    createData("Germany", "DE", 83019200, 357578),
-    createData("Ireland", "IE", 4857000, 70273),
-    createData("Mexico", "MX", 126577691, 1972550),
-    createData("Japan", "JP", 126317000, 377973),
-    createData("France", "FR", 67022000, 640679),
-    createData("United Kingdom", "GB", 67545757, 242495),
-    createData("Russia", "RU", 146793744, 17098246),
-    createData("Nigeria", "NG", 200962417, 923768),
-    createData("Brazil", "BR", 210147125, 8515767)
+    createData("Máscara", "Máscara descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara Top", "Máscara Top descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara Topson", "Máscara Topson descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara comum", "Máscara comum descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara com brilho", "Máscara com brilho descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara com listras", "Máscara com listras descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara amarela", "Máscara amarela descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara de bolinhas", "Máscara de bolinhas descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara barata", "Máscara barata descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara azul", "Máscara azul descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara preta", "Máscara preta descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara para encher bolinha", "Máscara para encher bolinha descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara muito cara", "Máscara muito cara descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara de zumbi", "Máscara de zumbi descrição", "06/10/2021", "06/10/2021"),
+    createData("Máscara de frankenstein", "Máscara de frankenstein descrição", "06/10/2021", "06/10/2021")
   ];
   
    const TopsonList = ()=>{
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(7);
   
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
     };
@@ -73,7 +87,7 @@ const columns = [
     };
   
     return (
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <Paper sx={{ width: "100%", overflow: "hidden", position: 'relative',}}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -98,9 +112,9 @@ const columns = [
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.code}
+                      key={row.epi}
                       onClick={function () {
-                        alert("teste");
+                        handleOpen();
                       }}
                     >
                       {columns.map((column) => {
@@ -122,7 +136,7 @@ const columns = [
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 50]}
+          rowsPerPageOptions={[7, 25, 50]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
@@ -130,6 +144,46 @@ const columns = [
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={open}>
+            <Box sx = {{
+              position: 'absolute',
+              top: '30%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 600,
+              height: 400,
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              color: 'white',
+              boxShadow: 24,
+              p: 4
+              //overflow: "hidden"
+            }}>
+              <h2>Imagem de Início</h2>
+              <img
+                alt='Imagem de Início'
+                src={'https://www.reviewbox.com.br/wp-content/uploads/2019/07/homens-trabalhando-1024x658.jpg'}
+              />
+              <h2>Imagem de Fim</h2>
+              <img
+                alt='Imagem de Fim'
+                src={'https://image.freepik.com/fotos-gratis/um-homem-forte-e-um-soldador-em-uma-mascara-de-solda-e-couro-de-soldador-um-produto-de-metal-e-soldado-com-uma-maquina-de-solda-na-garagem-faiscas-azuis-voam-para-os-lados_209729-664.jpg'}
+              />
+            </Box>
+          </Fade>
+        </Modal>
       </Paper>
     );
   }
