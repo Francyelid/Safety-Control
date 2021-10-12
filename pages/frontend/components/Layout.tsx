@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import NavSidebar from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
-import { Button, AppBar,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider} from "@material-ui/core";
+import { Button, AppBar,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Collapse} from "@material-ui/core";
 import MenuIcon  from "@material-ui/icons/Menu";
-import  {Mail, Inbox} from "@material-ui/icons";
+import  {Mail, Inbox, ExpandLess, ExpandMore} from "@material-ui/icons";
 import useSWR from 'swr';
 import cookie from 'js-cookie';
 import Router from 'next/router';
@@ -11,6 +11,14 @@ import Router from 'next/router';
 const Layout = ({ children }) => {
   const [state, setStateDrawer] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    setOpen(!open);
+  };
+
 
   const toggleDrawer =
     (open: boolean) =>
@@ -23,7 +31,7 @@ const Layout = ({ children }) => {
         return;
       }
 
-      setStateDrawer(!state);
+      setStateDrawer(open);
     };
 
     const handleListItemClick = (
@@ -55,12 +63,13 @@ const Layout = ({ children }) => {
   const list = () => (
     <Box
       role="presentation"
-      onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
-      <List>
+      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      component="nav"
+      aria-labelledby="nested-list-subheader">
           <ListItem key={"home"}>
-            <ListItemButton selected={selectedIndex === 0} onClick={(e)=>{ ChangePage("/frontend/pages/home");handleListItemClick(e, 0); }}>
+            <ListItemButton selected={selectedIndex === 0} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/home");handleListItemClick(e, 0); }}>
               <ListItemIcon>
                 <Inbox />
               </ListItemIcon>
@@ -68,7 +77,7 @@ const Layout = ({ children }) => {
             </ListItemButton>
           </ListItem>
           <ListItem key={"Dashboard"}>
-            <ListItemButton selected={selectedIndex === 1} onClick={(e)=>{ ChangePage("/frontend/pages/dashboard");handleListItemClick(e, 1); }}>
+            <ListItemButton selected={selectedIndex === 1} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/dashboard");handleListItemClick(e, 1); }}>
               <ListItemIcon>
                 <Inbox />
               </ListItemIcon>
@@ -76,13 +85,30 @@ const Layout = ({ children }) => {
             </ListItemButton>
           </ListItem>
           <ListItem key={"Ocorrencias"}>
-            <ListItemButton selected={selectedIndex === 2} onClick={(e)=>{ ChangePage("/frontend/pages/event");handleListItemClick(e, 2); }}>
+            <ListItemButton selected={selectedIndex === 2} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/event");handleListItemClick(e, 2); }}>
               <ListItemIcon>
                 <Inbox />
               </ListItemIcon>
               <ListItemText primary={"Ocorrências"} />
             </ListItemButton>
           </ListItem>
+          <ListItemButton onClick={e=>handleClick(e)}>
+            <ListItemIcon>
+              <Inbox />
+            </ListItemIcon>
+            <ListItemText primary="Cadastros" />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItemButton selected={selectedIndex === 3} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/user/userIndex");handleListItemClick(e, 3); }}>
+                <ListItemIcon>
+                  <Inbox />
+                </ListItemIcon>
+                <ListItemText primary="Usuário" />
+              </ListItemButton>
+            </List>
+          </Collapse>
       </List>
       <Divider />
       <List className="absolute bottom-0 w-full my-8">

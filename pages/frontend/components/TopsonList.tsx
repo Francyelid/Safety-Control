@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {DashboardLayout} from '../components/Layout';
+import DashboardLayout from '../components/Layout';
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";

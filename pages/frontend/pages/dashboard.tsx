@@ -174,7 +174,6 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   }
 }
 
-
   // Our sample dropdown options
   const optionsArray = ['Monday', 'Tuesday', 'Thursday', 
   'Friday', 'Saturday', 'Sunday']

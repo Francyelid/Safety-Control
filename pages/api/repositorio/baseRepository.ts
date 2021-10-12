@@ -1,19 +1,19 @@
-import {PrismaClient, Prisma} from '@prisma/client'
+import { prisma } from '../../../pcs'
 
 interface IBaseRepository<T>
 {
     Get(Id:number): Promise<T>;
-    GetAll(): Promise<T>;
-    GetAllWithFilters(filter: object): Promise<T>;
+    GetAll(): Promise<T[]>;
+    GetAllWithFilters(filter: object): Promise<T[]>;
     Add(entity:T): Promise<T>;
     Delete(id: number): Promise<T>;
-    DeleteAllWithFilters(filter: object): Promise<T>;
+    DeleteAllWithFilters(filter: object): Promise<T[]>;
     Update(entity:T): Promise<T>;
 }
 
 class BaseRepository<T> implements IBaseRepository<T>
 {
-    _prisma = new PrismaClient();
+    _prisma = prisma;
     _TName : string;
 
     constructor(x : new () => T){
@@ -32,14 +32,14 @@ class BaseRepository<T> implements IBaseRepository<T>
         return  result;
     }
 
-    async GetAll(): Promise<T>{
+    async GetAll(): Promise<T[]>{
 
         var result = await this._prisma[this._TName].findMany();
         return  result;
 
     }
 
-    async GetAllWithFilters(filter: object): Promise<T>{
+    async GetAllWithFilters(filter: object): Promise<T[]>{
         var result = await this._prisma[this._TName].findMany(filter);
         return  result;
     }
@@ -79,7 +79,7 @@ class BaseRepository<T> implements IBaseRepository<T>
         return result;
     }
 
-    async DeleteAllWithFilters(filter: object): Promise<T>{
+    async DeleteAllWithFilters(filter: object): Promise<T[]>{
         var result = await this._prisma[this._TName].deleteMany(filter);
         return  result;
     }
