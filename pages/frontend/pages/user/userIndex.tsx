@@ -293,8 +293,8 @@ const HomePage = () => {
                           }
                           return true;
                         }).map((column) => {
-                          
-                          const value = row[column.id]? row[column.id] : column.renderCell(row.id);
+                          debugger;
+                          const value = row[column.id]? row[column.id] : column.renderCell ? column.renderCell(row.id) : "";
                           return (
                             <TableCell key={column.id}
                                       //align={column.align}
