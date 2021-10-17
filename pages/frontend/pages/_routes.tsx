@@ -9,7 +9,7 @@ import DashboardPage from "./dashboard";
 import TeamsPage from "./teams";
 import HomePage from "./home";
 
-
+ 
 const Routes = () => {
   return (
     
