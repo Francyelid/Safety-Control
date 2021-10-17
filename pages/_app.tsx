@@ -3,7 +3,7 @@ import "./styles.css";
 import { ThemeProvider, createTheme} from '@material-ui/core';
 
 const App = ({ Component, pageProps }: AppProps) => {
-
+ 
   const theme = createTheme({
     palette:{
       mode:'dark',
