@@ -1,15 +1,25 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Router from 'next/router';
 import cookie from 'js-cookie';
 import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
 import { MailOutline, LockOutlined } from '@material-ui/icons'
 import { debug } from 'console';
+import { useSession, signIn, signOut } from "next-auth/client"
+import { useRouter} from 'next/router'
+import Link from 'next/link'
 
 const LoginPage = () => {
   const [loginError, setLoginError] = useState('');
   //const [email, setEmail] = useState('');
   //const [password, setPassword] = useState('');
   const [failValidation, setFailValidation] = useState('');
+  const [session] = useSession();
+
+  useEffect(()=>{
+    if(session && session.user){
+      Router.push('./frontend/pages/home');
+    }
+  },[]);
 
   function Item(props: BoxProps) {
     const { sx, ...other } = props;
@@ -30,41 +40,34 @@ const LoginPage = () => {
     );
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     var email = (document.getElementById('email') as (HTMLInputElement)).value;
     var password = (document.getElementById('password') as (HTMLInputElement)).value;
-
-    console.log(email);
-    console.log(password);
-    //call api
-    fetch('../../api/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-      .then((r) => {
-        console.log('login retorno')
-        return r.json();
-      })
-      .then((data) => {
-        if (data && data.error) {
-          setLoginError(data.message);
-          setFailValidation('true');
-        }else{
-          setFailValidation('false');
-        }
-        if (data && data.token) {
-          //set cookie
-          cookie.set('token', data.token, {expires: 2});
-          Router.push('/frontend/pages/home');
-        }
-      });
+    
+    if(!email)
+    {
+      setLoginError("E-mail precisa ser preenchido");
+      setFailValidation('true');
+    }else if(!password){
+      setLoginError("Senha precisa ser preenchida");
+      setFailValidation('true');
+    }else{
+      var result = await signIn("credentials", { redirect: false, email: email, password:password });
+      
+      if(result.error)
+      {
+        if(result.error == "CredentialsSignin")
+          setLoginError("E-mail ou senha invalido");
+        else
+          setLoginError(result.error);
+        setFailValidation('true');
+      }else if(result.ok){
+        Router.push('./frontend/pages/home');
+      }
+      
+    }
+    
   }
 
   return (
@@ -94,5 +97,9 @@ const LoginPage = () => {
     </React.Fragment>
   );
 };
+
+LoginPage.getInitialProps = async({query}) => {
+  return {query}
+}
 
 export default LoginPage;

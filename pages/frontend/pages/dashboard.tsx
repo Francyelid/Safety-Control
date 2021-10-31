@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useSession } from "next-auth/client";
+import Router from 'next/router';
 import DashboardLayout from '../components/Layout';
 import { GetStaticProps } from "next"
 import Chart from "react-google-charts";
@@ -182,6 +184,16 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   }
 
   const Dashboard = () => {
+
+    const  [session] = useSession();
+
+    useEffect(()=>{
+      if(!session){
+        Router.push('../../');
+      }
+    },[]);
+
+
     return (
       <DashboardLayout>
         <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%"}}>

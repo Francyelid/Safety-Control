@@ -14,6 +14,23 @@ class UserService{
         return result;
     }
 
+    async GetAuthentication(email:string, password:string): Promise<User>{
+
+        var result = await this._userRepository.GetAllWithFilters({
+            where:{
+                AND:[
+                    {email: email}
+                ]
+            }
+        });
+
+        var correctAuth = await bcrypt.compareSync(password, result[0].password);
+        if(correctAuth)
+            return result[0];
+        else
+            return null;
+    }
+
     async GetAll(): Promise<User[]>{
 
         var result = await this._userRepository.GetAll();
@@ -102,6 +119,11 @@ export default async (req, res) => {
             if(req.query["Id"])
             {
                 var result = await userService.Get(req.query["Id"]);
+                statusReturn = (200);
+                jsonReturn = ({result});
+            }else if(req.query["email"] && req.query["password"])
+            {
+                var result = await userService.GetAuthentication(req.query["email"], req.query["password"]);
                 statusReturn = (200);
                 jsonReturn = ({result});
             }

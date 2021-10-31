@@ -8,8 +8,6 @@ const saltRounds = 10;
 
 
 async function findUser(email_user, callback) {
-  console.log("aqui aqui") 
-  console.log(email_user)
   callback 
   callback(await prisma.user.findMany({
     select: { id: true, 
@@ -20,10 +18,8 @@ async function findUser(email_user, callback) {
 }
 
 function createUser( email_user, password_user, success, fail) {
-  console.log("createUser");
   bcrypt.hash(password_user, saltRounds, function(err, hash) {
     // Store hash in your password DB.
-    console.log("hash");
      return prisma.user.create({
         data: { 
             name: "teste",
@@ -32,8 +28,6 @@ function createUser( email_user, password_user, success, fail) {
             type: 1
         }
       }).then((creationResult) => {
-        console.log(creationResult)
-          console.log("aquiiiiii")
           const user = creationResult;
           const token = jwt.sign(
             {userId: user.id, email: user.email},
@@ -42,12 +36,9 @@ function createUser( email_user, password_user, success, fail) {
               expiresIn: 3000, //50 minutes
             },
           );
-          console.log("aquiiiiii")
           success(token);
          
         }).catch((error) => {
-          console.log(error)
-            console.log("aquiiiiii")
             fail(error);
 
         });
@@ -55,28 +46,20 @@ function createUser( email_user, password_user, success, fail) {
 }
 
 export default (req, res) => {
-  console.log('req') 
-  console.log(req.body) 
   if (req.method === 'POST') {
     // signup
     try {
-      console.log("chegou") 
       assert.notEqual(null, req.body.email, 'Email required');
       assert.notEqual(null, req.body.password, 'Password required');
-      console.log("chegou234") 
     } catch (bodyError) {
-      console.log(bodyError) 
       res.status(403).json({error: true, message: bodyError.message});
-    }
-    console.log("chegou34") 
+    } 
     // verify email does not exist already
  
       const email_rec = req.body.email;
       const password_rec = req.body.password;
 
       findUser(email_rec, function(received) {
-        console.log("aqui") 
-        console.log(received)
         if (typeof received == 'undefined') {
           res.status(500).json({error: true, message: 'Error finding User'});
           return;

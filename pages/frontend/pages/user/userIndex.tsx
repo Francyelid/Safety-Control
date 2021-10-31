@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import { useSession } from "next-auth/client";
+import Router from 'next/router';
 import DashboardLayout from '../../components/Layout';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import UserService from '../../../api/servicos/User/userService';
@@ -247,9 +249,10 @@ const HomePage = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
   useEffect(()=>{
-      users();
+
+    users();
+      
   },[]);
 
   return (
@@ -293,7 +296,6 @@ const HomePage = () => {
                           }
                           return true;
                         }).map((column) => {
-                          debugger;
                           const value = row[column.id]? row[column.id] : column.renderCell ? column.renderCell(row.id) : "";
                           return (
                             <TableCell key={column.id}

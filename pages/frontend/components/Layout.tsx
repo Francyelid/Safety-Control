@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import { useSession, signIn, signOut } from "next-auth/client"
 import NavSidebar from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
 import { Button, AppBar,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Collapse} from "@material-ui/core";
@@ -11,6 +12,14 @@ import Router from 'next/router';
 const Layout = ({ children }) => {
   const [state, setStateDrawer] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const  [session, loading] = useSession();
+  
+  useEffect(()=>{
+    if(!session){
+      Router.push('/');
+    }
+  }, [session]);
 
   const [open, setOpen] = React.useState(true);
 
@@ -41,23 +50,17 @@ const Layout = ({ children }) => {
       setSelectedIndex(index);
     };
 
-  let {data, error, mutate} = useSWR('../../api/me', async function(args) {
+  /*let {data, error, mutate} = useSWR('../../api/me', async function(args) {
     const res = await fetch(args);
     return res.json();
-  });
+  });*/
 
   function ChangePage(url){
     Router.push(url);
   }
   
   function Logout() {      
-    console.log('logout')   
-    console.log(data) 
-    cookie.remove('token');
-    mutate(data,true)
-    console.log('aqui')
-    console.log(data) 
-    Router.push('/frontend/pages/login');
+    signOut();
   };
 
   const list = () => (
@@ -124,8 +127,10 @@ const Layout = ({ children }) => {
     </Box>
   );
 
+  if (loading) 
+    return (<Box style={{height:"100vh", background:"#6E4582"}}></Box>);
 
-
+  if(session){
   return (
     <Box style={{height:"100vh", background:"#6E4582"}}>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
@@ -168,6 +173,9 @@ const Layout = ({ children }) => {
       </BodyWrapper>
     </Box>
   );
+  }else{
+    return (<p>Access Denied</p>);
+  }
 };
 
 export default Layout;

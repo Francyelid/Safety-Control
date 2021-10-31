@@ -10,7 +10,6 @@ const Signup = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("chegou1");
     fetch('api/users', {
       method: 'POST',
       headers: {
@@ -22,13 +21,10 @@ const Signup = () => {
       }),
     })
       .then((r) => {
-        
-        console.log("chegou22");
         return r.json(); 
       })
       .then((data) => {
         
-        console.log("chegou23232");
         if (data && data.error) {
           setSignupError(data.message);
         }

@@ -7,6 +7,7 @@ import Icon from "awesome-react-icons";
 import React, { useState } from "react";
 import useSWR from 'swr';
 import cookie from 'js-cookie';
+import { useSession, signIn, signOut } from "next-auth/client";
 
 import "react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css";
 
@@ -16,26 +17,20 @@ const NavSidebar = () => {
   const router = useRouter()
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  let {data, error, mutate} = useSWR('../../api/me', async function(args) {
+  /*let {data, error, mutate} = useSWR('../../api/me', async function(args) {
     const res = await fetch(args);
     return res.json();
-  });
+  });*/
 
-  function Logout() {      
-      console.log('logout')   
-      console.log(data) 
-      cookie.remove('token');
-      mutate(data,true)
-      console.log('aqui')
-      console.log(data) 
-      Router.push('/frontend/pages/login');
+  function Logout() {     
+      signOut();
   };
-
+  /*
   if (!data) return <h1>Loading...</h1>;
   let loggedIn = false;
   if (data.email) {
     loggedIn = true;
-  }
+  }*/
 
   return (
     <React.Fragment>

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useSession } from "next-auth/client";
+import Router from 'next/router';
 import Typography from '@material-ui/core/Typography';
 
 import DashboardLayout from '../components/Layout';
