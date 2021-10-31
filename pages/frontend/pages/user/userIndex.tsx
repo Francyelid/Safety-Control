@@ -6,7 +6,7 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import UserService from '../../../api/servicos/User/userService';
 import User from '../../../api/models/UserModel';
 import BaseRepository from '../../../api/repositorio/baseRepository';
-import {Modal, Box, Typography, Button, TextField, InputAdornment, BoxProps, IconButton } from "@material-ui/core";
+import {Modal, Box, Typography, Button, TextField, InputAdornment, BoxProps, IconButton, MenuItem } from "@material-ui/core";
 import { MailOutline, LockOutlined, Delete, AddBox  } from '@material-ui/icons';
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -16,6 +16,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
+import EUserType from "../../../api/utils/EUserType"
 
 const initial = {
     id:0,
@@ -107,11 +108,13 @@ const HomePage = () => {
   const handleOpen = (row) => {
     setOpen(true);
     setLine(row);
+    setEditError("");
   };
 
   const handleOpenCreate = () => {
     setOpenCreate(true);
     setCreateLine(initial);
+    setCreateError("");
   };
 
   const updateValue = (e) => {
@@ -155,7 +158,6 @@ const HomePage = () => {
 
   const createValue = (e) => {
     e.preventDefault();
-
     var user = new User();
     user.id = 0;
     user.email = createLine.email;
@@ -213,7 +215,6 @@ const HomePage = () => {
                 }
     });
   }
-
   const deleteValue = (deleteId) => {
     
     fetch('../../../api/servicos/User/userService', {
@@ -228,15 +229,23 @@ const HomePage = () => {
         return r.json();
     })
     .then((data) => {
-        if(data)
+        if(data.error)
+        {
+          var message = "";
+          for (var key of Object.keys(data.error)) {
+            var val = data.error[key];
+            message += val + "; ";
+          }
+
+          alert(message);
+          
+        }else if(data)
         {
           users();
         }
     });
   
   };
-
-
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -254,7 +263,7 @@ const HomePage = () => {
     users();
       
   },[]);
-
+  
   return (
     <DashboardLayout>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -296,7 +305,11 @@ const HomePage = () => {
                           }
                           return true;
                         }).map((column) => {
-                          const value = row[column.id]? row[column.id] : column.renderCell ? column.renderCell(row.id) : "";
+                          
+                          var value = row[column.id]? row[column.id] : column.renderCell ? column.renderCell(row.id) : "";
+                          if(column.id == "type")
+                            value = EUserType[value]? EUserType[value] : value;
+
                           return (
                             <TableCell key={column.id}
                                       //align={column.align}
@@ -344,8 +357,14 @@ const HomePage = () => {
                       InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}} />
                   </Item>
                   <Item>
-                      <TextField variant="outlined" label="Tipo" type="number" fullWidth name="type" value={createLine.type} onChange={changeInputCreate}
-                      InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}}/>
+                      <TextField variant="outlined" label="Tipo" select fullWidth name="type" value={createLine.type} onChange={changeInputCreate}
+                      InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}}>
+                          {Object.keys(EUserType).filter(v => isNaN(Number(v))).map((option) => (
+                            <MenuItem key={EUserType[option]} value={EUserType[option]}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </TextField>
                   </Item>
                   <Item>
                       <TextField variant="outlined" label="Senha" type="password" fullWidth name="password" value={createLine.password} onChange={changeInputCreate}
@@ -377,8 +396,14 @@ const HomePage = () => {
                       InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}} />
                   </Item>
                   <Item>
-                      <TextField variant="outlined" label="Tipo" type="number" fullWidth name="type" value={editLine.type} onChange={changeInputEdit}
-                      InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}}/>
+                      <TextField variant="outlined" label="Tipo" select fullWidth name="type" value={editLine.type} onChange={changeInputEdit}
+                      InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}}>
+                        {Object.keys(EUserType).filter(v => isNaN(Number(v))).map((option) => (
+                            <MenuItem key={EUserType[option]} value={EUserType[option]}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </TextField>
                   </Item>
                   <Item><Button color="secondary" size="large" variant = "contained" type="submit" onClick={updateValue}>Salvar</Button></Item>
                   {editError && 

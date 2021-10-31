@@ -1,6 +1,8 @@
 import User from "../../models/UserModel";
 import UserRepository from "../../repositorio/User/userRepository";
 import bcrypt from 'bcrypt';
+import { getSession } from "next-auth/client";
+import EUserType from "../../utils/EUserType";
 
 class UserService{
 
@@ -103,7 +105,29 @@ class UserService{
             result= false;
         }
 
+        if(!entity["type"] || entity["type"] === "")
+        {
+            this._listErrors["TipoObrigatorio"] = "Tipo precisa ser preenchido";
+            result= false;
+        }
+
         return result;
+    }
+
+    async IsMasterUser(email: string): Promise<boolean>{
+
+        var result = await this._userRepository.GetAllWithFilters({
+            where:{
+                AND:[
+                    {email: email}
+                ]
+            }
+        });
+
+        if(result && result[0].type == EUserType.Master)
+            return true;
+
+        return false;
     }
 
 }
@@ -113,6 +137,10 @@ export default async (req, res) => {
     var userService = new UserService();
     var statusReturn = 404;
     var jsonReturn = null;
+
+    const session = await getSession({ req });
+    var auth = session? await userService.IsMasterUser(session.user.email) : null;
+
     switch(req.method)
     {
         case 'GET':
@@ -138,41 +166,58 @@ export default async (req, res) => {
             }
             break;
         case 'PUT':
-            var entity = req.body.user as User;
-            var updated = await userService.Update(entity);
-            if(updated != null)
-            {
+            if(auth){
+                var entity = req.body.user as User;
+                var updated = await userService.Update(entity);
+                if(updated != null)
+                {
+                    statusReturn = (200);
+                    jsonReturn = (updated);
+                }
+                else{
+                    statusReturn = (200);
+                    jsonReturn = ({error:userService._listErrors});
+                }
+            }else{
                 statusReturn = (200);
-                jsonReturn = (updated);
+                userService._listErrors["AuthFail"] = "Somente usuários Master podem editar um usuário";
+                jsonReturn = ({error:userService._listErrors})
             }
-            else{
-                statusReturn = (200);
-                jsonReturn = ({error:userService._listErrors});
-            }
-
             break;
         case 'DELETE':
             if(req.body.id)
             {
-                let result = await userService.Delete(parseInt(req.body.id));
-                statusReturn = (200);
-                jsonReturn = (result);
+                if(auth){
+                    let result = await userService.Delete(parseInt(req.body.id));
+                    statusReturn = (200);
+                    jsonReturn = (result);
+                }else{
+                    statusReturn = (200);
+                    userService._listErrors["AuthFail"] = "Somente usuários Master podem deletar um usuário";
+                    jsonReturn = ({error:userService._listErrors})
+                }
             }else
             {
                 statusReturn = (400)
             }
             break;
         case 'POST':
-            var entity = req.body.user as User;
-            var created = await userService.Create(entity);
-            if(created != null)
-            {
+            if(auth){
+                var entity = req.body.user as User;
+                var created = await userService.Create(entity);
+                if(created != null)
+                {
+                    statusReturn = (200);
+                    jsonReturn = (created);
+                }
+                else{
+                    statusReturn = (200);
+                    jsonReturn = ({error:userService._listErrors});
+                }
+            }else{
                 statusReturn = (200);
-                jsonReturn = (created);
-            }
-            else{
-                statusReturn = (200);
-                jsonReturn = ({error:userService._listErrors});
+                userService._listErrors["AuthFail"] = "Somente usuários Master podem criar um novo usuário";
+                jsonReturn = ({error:userService._listErrors})
             }
             break;
         default:

@@ -16,10 +16,10 @@ const Layout = ({ children }) => {
   const  [session, loading] = useSession();
   
   useEffect(()=>{
-    if(!session){
+    if((!session)){
       Router.push('/');
     }
-  }, [session]);
+  }, [session, loading]);
 
   const [open, setOpen] = React.useState(true);
 
