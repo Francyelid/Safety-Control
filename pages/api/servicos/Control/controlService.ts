@@ -20,7 +20,7 @@ class ControlService{
     }
 
     async Update(entity:Control): Promise<Control>{
-        if(await this.IsValid(entity) && entity["id"] !=0){
+        if(await this.IsValidToUpdate(entity) && entity["id"] !=0){
             var result = await this._controlRepository.Update(entity);
             return result;
         }else{
@@ -50,6 +50,7 @@ class ControlService{
 
     async IsValid(entity): Promise<boolean>{
         var result = true;
+        console.log(entity)
         if(!entity["epi_id"] || entity["epi_id"] === "")
         {
             this._listErrors["EpiObrigatorio"] = "epi_id precisa ser preenchido";
@@ -71,6 +72,47 @@ class ControlService{
         return result;
     }
 
+    async IsValidToUpdate(entity): Promise<boolean>{
+        var result = true;
+        console.log(entity)
+
+        if(!entity["id"] || entity["id"] === "")
+        {
+            this._listErrors["IdObrigatorio"] = "id precisa ser preenchido";
+            result= false;
+        }
+
+        if(!entity["epi_id"] || entity["epi_id"] === "")
+        {
+            this._listErrors["EpiObrigatorio"] = "epi_id precisa ser preenchido";
+            result= false;
+        }
+
+        if(!entity["description"] || entity["description"] === "")
+        {
+            this._listErrors["ControlDescObrigatorio"] = "description precisa ser preenchido";
+            result= false;
+        }
+
+        if(!entity["end_image"] || entity["end_image"] === "")
+        {
+            this._listErrors["EndImageObrigatorio"] = "end_image precisa ser preenchido";
+            result= false;
+        }
+
+        if(!entity["end_date"] || entity["end_date"] === "")
+        {
+            this._listErrors["EndDateObrigatorio"] = "end_date precisa ser preenchido";
+            result= false;
+        }else{
+            entity["end_date"] = new Date(entity["end_date"])
+            console.log(entity)
+        }
+
+
+        return result;
+    }
+
 }
 
 
@@ -78,8 +120,11 @@ export default async (req, res) => {
     var controlService = new ControlService();
     var statusReturn = 404;
     var jsonReturn = null;
+    console.log(req)
+    console.log("teste")
     switch(req.method)
     {
+        
         case 'GET':
             if(req.query["Id"])
             {
