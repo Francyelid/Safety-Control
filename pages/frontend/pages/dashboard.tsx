@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useSession } from "next-auth/client";
 import Router from 'next/router';
 import DashboardLayout from '../components/Layout';
@@ -186,11 +186,29 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   const Dashboard = () => {
 
     const  [session] = useSession();
-
+    const [episArray, setEpisArray] = useState([]);
+    
     useEffect(()=>{
+
       if(!session){
         Router.push('../../');
       }
+
+      
+      fetch('../../api/servicos/Epis/episService', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((result) => {
+        result.json().then((res) => {
+          let episName = res.map(function(row) {
+            return row["name"];
+          })
+          setEpisArray(episName);
+        })
+      })
+      
     },[]);
 
 
@@ -208,12 +226,12 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                   <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
                     <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
                       <Item>
-                        <Combobox title={"teste"} options={optionsArray}/>
+                        <Combobox title={"Tipo de EPI"} options={episArray}/>
                       </Item>
                       <Item>
-                        <Combobox title={"teste"} options={optionsArray}/>
+                        <Combobox title={"Periodo"} options={optionsArray}/>
                       </Item>
-                        <Item>
+                      <Item>
                         <Combobox title={"teste"} options={optionsArray}/>
                       </Item>
                     </Box>

@@ -78,12 +78,13 @@ export default async (req, res) => {
     var episService = new EpisService();
     var statusReturn = 404;
     var jsonReturn = null;
+    var result = new Array<Epis>();
     switch(req.method)
     {
         case 'GET':
             if(req.query["Id"])
             {
-                var result = await episService.Get(req.query["Id"]);
+                result[0] = await episService.Get(req.query["Id"]);
                 statusReturn = (200);
                 jsonReturn = ({result});
             }
@@ -91,8 +92,7 @@ export default async (req, res) => {
             {
                 var episs = await episService.GetAll();
                 let result = {};
-                result["Episs"] = episs;
-
+                result = episs;
                 statusReturn = (200);
                 jsonReturn = (result);
             }

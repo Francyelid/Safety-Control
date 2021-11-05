@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import DashboardLayout from '../components/Layout';
 import Paper from "@material-ui/core/Paper";
@@ -29,6 +29,7 @@ const style = {
 };
 
 const columns = [
+    { id: "id", label: "Id", minWidth: 170 },
     { id: "epi", label: "EPI", minWidth: 170 },
     { id: "description", label: "Descrição", minWidth: 100 },
     {
@@ -47,10 +48,10 @@ const columns = [
     }
   ];
   
-  function createData(epi, description, start_date, end_date) {
-    return { epi, description, start_date, end_date };
+  function createData(id, epi, description, start_date, end_date) {
+    return { id, epi, description, start_date, end_date };
   }
-  
+  /*
   const rows = [
     createData("Máscara", "Máscara descrição", "06/10/2021", "06/10/2021"),
     createData("Máscara Top", "Máscara Top descrição", "06/10/2021", "06/10/2021"),
@@ -67,15 +68,38 @@ const columns = [
     createData("Máscara muito cara", "Máscara muito cara descrição", "06/10/2021", "06/10/2021"),
     createData("Máscara de zumbi", "Máscara de zumbi descrição", "06/10/2021", "06/10/2021"),
     createData("Máscara de frankenstein", "Máscara de frankenstein descrição", "06/10/2021", "06/10/2021")
-  ];
+  ];*/
   
    const TopsonList = ()=>{
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(7);
-  
+    const [controlArray, setControlArray] = React.useState([]);
+    const [idSelected, setIdSelected] = React.useState(null);
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
+
+    const handleOpen = (id) => {
+      setOpen(true)
+      setIdSelected(id)
+    }
     const handleClose = () => setOpen(false);
+
+    useEffect(()=>{
+
+      fetch('../../api/servicos/Control/controlService', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((result) => {
+        result.json().then((res) => {
+          let rows = res.map(function(row) {
+            return createData(row["id"],row["epi_id"],row["description"],row["start_date"],row["end_date"]);
+          })
+          setControlArray(rows);
+        })
+      })
+      
+    },[]);
 
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
@@ -104,7 +128,7 @@ const columns = [
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
+              {controlArray
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
@@ -112,9 +136,9 @@ const columns = [
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.epi}
+                      key={row.id}
                       onClick={function () {
-                        handleOpen();
+                        handleOpen(row.id);
                       }}
                     >
                       {columns.map((column) => {
@@ -138,7 +162,7 @@ const columns = [
         <TablePagination
           rowsPerPageOptions={[7, 25, 50]}
           component="div"
-          count={rows.length}
+          count={controlArray.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -171,6 +195,7 @@ const columns = [
               p: 4
               //overflow: "hidden"
             }}>
+              <h2>Id: {idSelected}</h2>
               <h2>Imagem de Início</h2>
               <img
                 alt='Imagem de Início'

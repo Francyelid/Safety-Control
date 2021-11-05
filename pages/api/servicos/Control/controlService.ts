@@ -122,13 +122,14 @@ export default async (req, res) => {
     var jsonReturn = null;
     console.log(req)
     console.log("teste")
+    var result = new Array<Control>();
     switch(req.method)
     {
         
         case 'GET':
             if(req.query["Id"])
             {
-                var result = await controlService.Get(req.query["Id"]);
+                result[0] = await controlService.Get(req.query["Id"]);
                 statusReturn = (200);
                 jsonReturn = ({result});
             }
@@ -136,7 +137,7 @@ export default async (req, res) => {
             {
                 var controls = await controlService.GetAll();
                 let result = {};
-                result["Controls"] = controls;
+                result = controls;
 
                 statusReturn = (200);
                 jsonReturn = (result);
