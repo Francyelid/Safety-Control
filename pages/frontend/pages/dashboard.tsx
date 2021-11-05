@@ -176,9 +176,10 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   }
 }
 
-  // Our sample dropdown options
-  const optionsArray = ['Monday', 'Tuesday', 'Thursday', 
-  'Friday', 'Saturday', 'Sunday']
+
+  const quantityArray = Array(30).fill(0).map((e, i)=> e = i+1)
+  const periodTypeArray = ['Ano', 'Mês', 'Dia', 'Hora']
+
   const teste = function (){
     alert("!");
   }
@@ -226,13 +227,13 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                   <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
                     <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
                       <Item>
-                        <Combobox title={"Tipo de EPI"} options={episArray}/>
+                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"}/>
                       </Item>
                       <Item>
-                        <Combobox title={"Periodo"} options={optionsArray}/>
+                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"}/>
                       </Item>
                       <Item>
-                        <Combobox title={"teste"} options={optionsArray}/>
+                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"}/>
                       </Item>
                     </Box>
                   </Grid>

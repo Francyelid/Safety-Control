@@ -14,7 +14,7 @@ const Combobox = (props) => {
         options={props.options}
         style={{ width: 300 }}
         renderInput={(params) =>
-          <TextField {...params} label="Combo box" variant="outlined" />}
+          <TextField {...params} label={props.unselect} variant="outlined" />}
       />
     </Grid>
   );

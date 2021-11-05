@@ -90,12 +90,25 @@ const columns = [
         headers: {
           'Content-Type': 'application/json',
         }
-      }).then((result) => {
-        result.json().then((res) => {
-          let rows = res.map(function(row) {
-            return createData(row["id"],row["epi_id"],row["description"],row["start_date"],row["end_date"]);
+      }).then((resultControl) => {
+        fetch('../../api/servicos/Epis/episService', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then((resultEpi) => {
+          resultEpi.json().then((resEpi) => {
+            resultControl.json().then((resControl) => {
+              let rows = resControl.map(function(row) { 
+                function findEpi(inv) {
+                  return inv["id"] === row["epi_id"];
+                }
+                let epiFinded = resEpi.find(findEpi)       
+                return createData(row["id"],epiFinded.name,row["description"],row["start_date"],row["end_date"]);
+              })
+              setControlArray(rows);
+            })
           })
-          setControlArray(rows);
         })
       })
       
@@ -188,6 +201,7 @@ const columns = [
               transform: 'translate(-50%, -50%)',
               width: 600,
               height: 400,
+              padding: 10,
               bgcolor: 'background.paper',
               border: '2px solid #000',
               color: 'white',
