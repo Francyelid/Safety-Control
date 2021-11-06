@@ -1,0 +1,31 @@
+-----------anaconda sheel ---------------
+https://www.youtube.com/watch?v=JxRk4Be3a8I
+
+cd C:\Users\my_user\Desktop\Projeto_1_IFSP\helmet_detection
+
+conda create -n "helmet_detection" python=3.9
+
+conda activate helmet_detection
+
+pip install tensorflow==2.5
+
+git clone https://github.com/tensorflow/models.git
+
+cd models/research
+
+protoc object_detection/protos/*.proto --python_out=.
+
+python -m pip install .
+
+python object_detection_camera.py
+
+python3 --version
+pip3 --version
+
+pip install matplotlib
+pip install tf_slim
+
+
+Arquivos alterados
+helmet_detection\models\research\object_detection\utils\visualization_utils.py
+helmet_detection\models\research\object_detection_camera.py
