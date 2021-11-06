@@ -29,6 +29,7 @@ const style = {
 };
 
 const columns = [
+    { id: "status", label: "Status", minWidth: 170 },
     { id: "id", label: "Id", minWidth: 170 },
     { id: "epi", label: "EPI", minWidth: 170 },
     { id: "description", label: "Descrição", minWidth: 100 },
@@ -48,38 +49,25 @@ const columns = [
     }
   ];
   
-  function createData(id, epi, description, start_date, end_date) {
-    return { id, epi, description, start_date, end_date };
+  function createData(status, id, epi, description, start_date, end_date, start_image, end_image) {
+    return {status, id, epi, description, start_date, end_date, start_image, end_image };
   }
-  /*
-  const rows = [
-    createData("Máscara", "Máscara descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara Top", "Máscara Top descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara Topson", "Máscara Topson descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara comum", "Máscara comum descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara com brilho", "Máscara com brilho descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara com listras", "Máscara com listras descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara amarela", "Máscara amarela descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara de bolinhas", "Máscara de bolinhas descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara barata", "Máscara barata descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara azul", "Máscara azul descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara preta", "Máscara preta descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara para encher bolinha", "Máscara para encher bolinha descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara muito cara", "Máscara muito cara descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara de zumbi", "Máscara de zumbi descrição", "06/10/2021", "06/10/2021"),
-    createData("Máscara de frankenstein", "Máscara de frankenstein descrição", "06/10/2021", "06/10/2021")
-  ];*/
   
    const TopsonList = ()=>{
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(7);
     const [controlArray, setControlArray] = React.useState([]);
     const [idSelected, setIdSelected] = React.useState(null);
+    const [imageStartSelected, setImageStartSelected] = React.useState('');
     const [open, setOpen] = React.useState(false);
 
-    const handleOpen = (id) => {
+    const handleOpen = (item) => {
+      //console.log(item.start_image)
+      setImageStartSelected(item.start_image)
+      console.log(imageStartSelected)
       setOpen(true)
-      setIdSelected(id)
+      setIdSelected(item.id)
+      
     }
     const handleClose = () => setOpen(false);
 
@@ -99,13 +87,21 @@ const columns = [
         }).then((resultEpi) => {
           resultEpi.json().then((resEpi) => {
             resultControl.json().then((resControl) => {
+              
               let rows = resControl.map(function(row) { 
                 function findEpi(inv) {
                   return inv["id"] === row["epi_id"];
                 }
-                let epiFinded = resEpi.find(findEpi)       
-                return createData(row["id"],epiFinded.name,row["description"],row["start_date"],row["end_date"]);
+                let epiFinded = resEpi.find(findEpi)   
+
+                let startDate = new Date(row["start_date"]);   
+                let endDate = new Date(row["end_date"]);                       
+                let diff = endDate.getTime() - startDate.getTime();   
+                
+                let statusControl =  diff < 0 ? 'true' : 'false'
+                return createData(statusControl,row["id"],epiFinded.name,row["description"],row["start_date"],row["end_date"],row["start_image"],row["end_image"]);
               })
+              console.log(rows)
               setControlArray(rows);
             })
           })
@@ -151,7 +147,7 @@ const columns = [
                       tabIndex={-1}
                       key={row.id}
                       onClick={function () {
-                        handleOpen(row.id);
+                        handleOpen(row);
                       }}
                     >
                       {columns.map((column) => {
@@ -213,7 +209,7 @@ const columns = [
               <h2>Imagem de Início</h2>
               <img
                 alt='Imagem de Início'
-                src={'https://www.reviewbox.com.br/wp-content/uploads/2019/07/homens-trabalhando-1024x658.jpg'}
+                src={'data:image/png;base64, '+imageStartSelected}
               />
               <h2>Imagem de Fim</h2>
               <img

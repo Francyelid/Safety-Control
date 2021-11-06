@@ -115,6 +115,13 @@ class ControlService{
 
 }
 
+export const config = {
+    api: {
+      bodyParser: {
+        sizeLimit: '8mb',
+      },
+    },
+  }
 
 export default async (req, res) => {
     var controlService = new ControlService();
@@ -138,7 +145,6 @@ export default async (req, res) => {
                 var controls = await controlService.GetAll();
                 let result = {};
                 result = controls;
-
                 statusReturn = (200);
                 jsonReturn = (result);
             }
