@@ -214,22 +214,30 @@ const columns = [
               p: 4
               //overflow: "hidden"
             }}>
-              <Grid container spacing={2}>
-              <Item>
-              <h2>Id: {idSelected}</h2>
-              <h2>Imagem de Início</h2>
-              <img
-                alt='Imagem de Início'
-                src={'data:image/png;base64, '+imageStartSelected.substring(2,imageStartSelected.length-1)}
-                />
-              </Item>
-              <Item>
-              <h2>Imagem de Fim</h2>
-              <img
-                alt='Imagem de Fim'
-                src={'data:image/png;base64, '+imageEndSelected.substring(2,imageEndSelected.length-1)}
-              />
-              </Item>
+              <Grid container spacing={2}
+                >
+                <h2>Id: {idSelected}</h2>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                  <Item>
+                    <h2>Imagem de Início</h2>
+                    <img
+                      width="550"
+                      height="550"
+                      alt='Imagem de Início'
+                      src={'data:image/png;base64, '+imageStartSelected.substring(2,imageStartSelected.length-1)}
+                      />
+                  </Item>
+                  <Item>
+                    <h2>Imagem de Fim</h2>
+                    {!imageEndSelected ? '' : 
+                    <img
+                      width="550"
+                      height="550"
+                      alt='Imagem de Fim'
+                      src={'data:image/png;base64, '+imageEndSelected.substring(2,imageEndSelected.length-1)}
+                    />}
+                  </Item>
+                </div>
               </Grid>
             </Box>
           </Fade>
