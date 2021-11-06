@@ -4,7 +4,7 @@ import NavSidebar from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
 import { Button, AppBar,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Collapse, Backdrop, CircularProgress} from "@material-ui/core";
 import MenuIcon  from "@material-ui/icons/Menu";
-import  {Mail, Inbox, ExpandLess, ExpandMore} from "@material-ui/icons";
+import  {Mail, Inbox, ExpandLess, ExpandMore, Home, Dashboard, EventAvailable, Storage, Person, ExitToApp} from "@material-ui/icons";
 import useSWR from 'swr';
 import cookie from 'js-cookie';
 import Router from 'next/router';
@@ -84,7 +84,7 @@ const Layout = ({ children }) => {
           <ListItem key={"home"}>
             <ListItemButton selected={selectedIndex === 0} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/home");handleListItemClick(e, 0); }}>
               <ListItemIcon>
-                <Inbox />
+                <Home />
               </ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItemButton>
@@ -92,7 +92,7 @@ const Layout = ({ children }) => {
           <ListItem key={"Dashboard"}>
             <ListItemButton selected={selectedIndex === 1} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/dashboard");handleListItemClick(e, 1); }}>
               <ListItemIcon>
-                <Inbox />
+                <Dashboard />
               </ListItemIcon>
               <ListItemText primary={"Dashboard"} />
             </ListItemButton>
@@ -100,14 +100,14 @@ const Layout = ({ children }) => {
           <ListItem key={"Ocorrencias"}>
             <ListItemButton selected={selectedIndex === 2} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/event");handleListItemClick(e, 2); }}>
               <ListItemIcon>
-                <Inbox />
+                <EventAvailable />
               </ListItemIcon>
               <ListItemText primary={"Ocorrências"} />
             </ListItemButton>
           </ListItem>
           <ListItemButton onClick={e=>handleClick(e)}>
             <ListItemIcon>
-              <Inbox />
+              <Storage />
             </ListItemIcon>
             <ListItemText primary="Cadastros" />
             {open ? <ExpandLess /> : <ExpandMore />}
@@ -116,7 +116,7 @@ const Layout = ({ children }) => {
             <List component="div" disablePadding>
               <ListItemButton selected={selectedIndex === 3} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/user/userIndex");handleListItemClick(e, 3); }}>
                 <ListItemIcon>
-                  <Inbox />
+                  <Person />
                 </ListItemIcon>
                 <ListItemText primary="Usuário" />
               </ListItemButton>
@@ -128,7 +128,7 @@ const Layout = ({ children }) => {
           <ListItem key="Logout">
             <ListItemButton selected={selectedIndex === 5}  onClick={(e)=>{Logout();handleListItemClick(e, 5)}}> 
               <ListItemIcon>
-                <Mail />
+                <ExitToApp />
               </ListItemIcon>
               <ListItemText primary={"Logout"} />
             </ListItemButton>
@@ -168,7 +168,7 @@ const Layout = ({ children }) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} color="white">
             Safety Control
           </Typography>
-          <Avatar>K</Avatar>
+          <Avatar>{(session && session.user)?  session.user.name[0].toUpperCase(): ""}</Avatar>
         </Toolbar>
         <Box className="flex" style={{height:"90vh", background:"#6E4582"}}>
           <Box style={{height:"90vh",width:"95%", paddingTop:"10vh", paddingLeft:"3%"}}>
