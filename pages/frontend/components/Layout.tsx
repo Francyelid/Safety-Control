@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useSession, signIn, signOut } from "next-auth/client"
 import NavSidebar from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
-import { Button, AppBar,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Collapse} from "@material-ui/core";
+import { Button, AppBar,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Collapse, Backdrop, CircularProgress} from "@material-ui/core";
 import MenuIcon  from "@material-ui/icons/Menu";
 import  {Mail, Inbox, ExpandLess, ExpandMore} from "@material-ui/icons";
 import useSWR from 'swr';
@@ -55,11 +55,21 @@ const Layout = ({ children }) => {
     return res.json();
   });*/
 
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const handleLoadingClose = () => {
+    setOpenLoading(false);
+  };
+  const handleLoadingToggle = () => {
+    setOpenLoading(!openLoading);
+  };
+
   function ChangePage(url){
+    handleLoadingToggle();
     Router.push(url);
   }
   
-  function Logout() {      
+  function Logout() {    
+    handleLoadingToggle();  
     signOut();
   };
 
@@ -171,6 +181,16 @@ const Layout = ({ children }) => {
           </Box>
         </Box>
       </BodyWrapper>
+      <div>
+      
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openLoading}
+          onClick={handleLoadingToggle}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
     </Box>
   );
   }else{

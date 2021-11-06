@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Router from 'next/router';
 import cookie from 'js-cookie';
-import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
+import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment, Backdrop, CircularProgress } from '@material-ui/core';
 import { MailOutline, LockOutlined } from '@material-ui/icons'
 import { debug } from 'console';
 import { useSession, signIn, signOut } from "next-auth/client"
@@ -14,6 +14,14 @@ const LoginPage = () => {
   //const [password, setPassword] = useState('');
   const [failValidation, setFailValidation] = useState('');
   const [session] = useSession();
+
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
 
   useEffect(()=>{
     if(session && session.user){
@@ -42,6 +50,7 @@ const LoginPage = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    handleToggle();
     var email = (document.getElementById('email') as (HTMLInputElement)).value;
     var password = (document.getElementById('password') as (HTMLInputElement)).value;
     
@@ -49,9 +58,11 @@ const LoginPage = () => {
     {
       setLoginError("E-mail precisa ser preenchido");
       setFailValidation('true');
+      handleClose();
     }else if(!password){
       setLoginError("Senha precisa ser preenchida");
       setFailValidation('true');
+      handleClose();
     }else{
       var result = await signIn("credentials", { redirect: false, email: email, password:password });
       
@@ -65,7 +76,7 @@ const LoginPage = () => {
       }else if(result.ok){
         Router.push('./frontend/pages/home');
       }
-      
+      handleClose();
     }
     
   }
@@ -94,6 +105,15 @@ const LoginPage = () => {
               </Box>
             </form>
       </Grid>
+      <div>
+      
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
     </React.Fragment>
   );
 };
