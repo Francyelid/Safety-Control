@@ -8,6 +8,7 @@ class UserService{
 
     _userRepository = new UserRepository();
     _listErrors = new Object();
+    _session = null;
 
     async Get(Id:number): Promise<User>{
 
@@ -40,6 +41,13 @@ class UserService{
     }
 
     async Update(entity:User): Promise<User>{
+
+        if(this._session && entity.email == this._session.user.email)
+        {
+            this._listErrors["UsuarioAtual"] = "Não é permitido editar o usuário em uso";
+            return null;
+        }
+
         if(await this.IsValid(entity) && entity["id"] !=0){
             var result = await this._userRepository.Update(entity);
             return result;
@@ -63,11 +71,19 @@ class UserService{
 
     async Delete(id:number): Promise<User>{
         if(id !=0){
+            var entity = await this.Get(id);
+            if(this._session && entity.email == this._session.user.email)
+            {
+                this._listErrors["UsuarioAtual"] = "Não é permitido excluir o usuário em uso";
+                return null;
+            }
+
             var result = await this._userRepository.Delete(id);
             return result;
-        }else{
-            return null;
         }
+        
+        return null;
+        
     }
 
     async IsValid(entity): Promise<boolean>{
@@ -139,6 +155,7 @@ export default async (req, res) => {
     var jsonReturn = null;
 
     const session = await getSession({ req });
+    userService._session = session;
     var auth = session? await userService.IsMasterUser(session.user.email) : null;
 
     switch(req.method)
@@ -189,8 +206,13 @@ export default async (req, res) => {
             {
                 if(auth){
                     let result = await userService.Delete(parseInt(req.body.id));
-                    statusReturn = (200);
-                    jsonReturn = (result);
+                    if(result){
+                        statusReturn = (200);
+                        jsonReturn = (result);
+                    }else{
+                        statusReturn = (200);
+                        jsonReturn = ({error:userService._listErrors});
+                    }
                 }else{
                     statusReturn = (200);
                     userService._listErrors["AuthFail"] = "Somente usuários Master podem deletar um usuário";

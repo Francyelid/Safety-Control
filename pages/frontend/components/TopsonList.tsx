@@ -15,6 +15,8 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { styled } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 const style = {
   position: 'absolute',
@@ -27,6 +29,13 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const columns = [
     { id: "status", label: "Status", minWidth: 170 },
@@ -181,6 +190,7 @@ const columns = [
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
+          style={{display:'flex',alignItems:'center',justifyContent:'center'}}
           open={open}
           onClose={handleClose}
           closeAfterTransition
@@ -191,12 +201,11 @@ const columns = [
         >
           <Fade in={open}>
             <Box sx = {{
+              //top: '50%',
+              //left: '20%',
+              margin:'auto',
               position: 'absolute',
-              top: '30%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 600,
-              height: 400,
+              //transform: 'translate(-50%, -50%)',
               padding: 10,
               bgcolor: 'background.paper',
               border: '2px solid #000',
@@ -205,17 +214,23 @@ const columns = [
               p: 4
               //overflow: "hidden"
             }}>
+              <Grid container spacing={2}>
+              <Item>
               <h2>Id: {idSelected}</h2>
               <h2>Imagem de Início</h2>
               <img
                 alt='Imagem de Início'
                 src={'data:image/png;base64, '+imageStartSelected}
-              />
+                />
+              </Item>
+              <Item>
               <h2>Imagem de Fim</h2>
               <img
                 alt='Imagem de Fim'
                 src={'https://image.freepik.com/fotos-gratis/um-homem-forte-e-um-soldador-em-uma-mascara-de-solda-e-couro-de-soldador-um-produto-de-metal-e-soldado-com-uma-maquina-de-solda-na-garagem-faiscas-azuis-voam-para-os-lados_209729-664.jpg'}
               />
+              </Item>
+              </Grid>
             </Box>
           </Fade>
         </Modal>
