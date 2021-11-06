@@ -25,7 +25,9 @@ export default(req, res) => NextAuth(req, res, {
             await fetch(url, {
               method: 'GET',
               headers: {
-                'Content-Type': 'application/json',
+                //'Content-Type': 'application/json',
+                'User-Agent': '*',
+                Accept: 'application/json, text/plain, /',
               },
             }).then((r) => {
               return r.json();

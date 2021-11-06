@@ -68,12 +68,13 @@ const columns = [
     const [controlArray, setControlArray] = React.useState([]);
     const [idSelected, setIdSelected] = React.useState(null);
     const [imageStartSelected, setImageStartSelected] = React.useState('');
+    const [imageEndSelected, setImageEndSelected] = React.useState('');
+    
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = (item) => {
-      //console.log(item.start_image)
       setImageStartSelected(item.start_image)
-      console.log(imageStartSelected)
+      setImageEndSelected(item.end_image)
       setOpen(true)
       setIdSelected(item.id)
       
@@ -110,7 +111,6 @@ const columns = [
                 let statusControl =  diff < 0 ? 'true' : 'false'
                 return createData(statusControl,row["id"],epiFinded.name,row["description"],row["start_date"],row["end_date"],row["start_image"],row["end_image"]);
               })
-              console.log(rows)
               setControlArray(rows);
             })
           })
@@ -220,14 +220,14 @@ const columns = [
               <h2>Imagem de Início</h2>
               <img
                 alt='Imagem de Início'
-                src={'data:image/png;base64, '+imageStartSelected}
+                src={'data:image/png;base64, '+imageStartSelected.substring(2,imageStartSelected.length-1)}
                 />
               </Item>
               <Item>
               <h2>Imagem de Fim</h2>
               <img
                 alt='Imagem de Fim'
-                src={'https://image.freepik.com/fotos-gratis/um-homem-forte-e-um-soldador-em-uma-mascara-de-solda-e-couro-de-soldador-um-produto-de-metal-e-soldado-com-uma-maquina-de-solda-na-garagem-faiscas-azuis-voam-para-os-lados_209729-664.jpg'}
+                src={'data:image/png;base64, '+imageEndSelected.substring(2,imageEndSelected.length-1)}
               />
               </Item>
               </Grid>

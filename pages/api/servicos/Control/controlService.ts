@@ -50,7 +50,7 @@ class ControlService{
 
     async IsValid(entity): Promise<boolean>{
         var result = true;
-        console.log(entity)
+        
         if(!entity["epi_id"] || entity["epi_id"] === "")
         {
             this._listErrors["EpiObrigatorio"] = "epi_id precisa ser preenchido";
@@ -74,7 +74,7 @@ class ControlService{
 
     async IsValidToUpdate(entity): Promise<boolean>{
         var result = true;
-        console.log(entity)
+        
 
         if(!entity["id"] || entity["id"] === "")
         {
@@ -106,7 +106,7 @@ class ControlService{
             result= false;
         }else{
             entity["end_date"] = new Date(entity["end_date"])
-            console.log(entity)
+            
         }
 
 
@@ -127,8 +127,7 @@ export default async (req, res) => {
     var controlService = new ControlService();
     var statusReturn = 404;
     var jsonReturn = null;
-    console.log(req)
-    console.log("teste")
+    
     var result = new Array<Control>();
     switch(req.method)
     {
