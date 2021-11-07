@@ -1,5 +1,4 @@
 -----------anaconda sheel ---------------
-https://www.youtube.com/watch?v=JxRk4Be3a8I
 
 cd C:\Users\my_user\Desktop\Projeto_1_IFSP\helmet_detection
 
