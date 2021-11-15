@@ -25,9 +25,11 @@ export default (req, res) => {
   if (req.method === 'POST') {
     //login
     try {
+      console.log(req.body)
       assert.notEqual(null, req.body.email, 'Email required');
       assert.notEqual(null, req.body.password, 'Password required');
     } catch (bodyError) {
+      console.log("entrou erro")
       res.status(403).send(bodyError.message);
     }
       const email_rec = req.body.email;
@@ -65,7 +67,8 @@ export default (req, res) => {
       });
   } else {
     // Handle any other HTTP method
-    res.statusCode = 401;
+    res.status(401).json({error: true, message: 'Auth Failed'});
+    //res.statusCode = 401;
     res.end();
   }
 };

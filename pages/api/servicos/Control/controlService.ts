@@ -118,7 +118,7 @@ class ControlService{
 export const config = {
     api: {
       bodyParser: {
-        sizeLimit: '8mb',
+        sizeLimit: '50mb',
       },
     },
   }
