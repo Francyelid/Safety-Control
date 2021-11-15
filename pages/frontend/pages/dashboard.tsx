@@ -127,6 +127,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
 
   const quantityArray = Array(30).fill(0).map((e, i)=> e = i+1)
   const periodTypeArray = ['Ano', 'Mês', 'Dia', 'Hora']
+  const periodTypeObject = { 'Ano':1, 'Mês':2, 'Dia':3, 'Hora':4}
 
   const teste = function (){
     alert("!");
@@ -138,6 +139,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     const [episArray, setEpisArray] = useState([]);
     const [dataArray, setDataArray] = useState([["Data","Quantidate"],["01/01/2000",0]]);
     const [excelData, setExcelData] = useState([]);
+    const [excelDataFilter, setExcelDataFilter] = useState([]);
     const [selectedItemEpi, setSelectedItemEpi] = useState(null);
     const [selectedItemPeriodo, setSelectedItemPeriodo] = useState(null);
     const [selectedItemQuantidade, setSelectedItemQuantidade] = useState(null);
@@ -159,6 +161,23 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
               return csvData;
       
   };
+
+  const getCsvDataFilter = () => {
+    const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
+            let i;
+            for (i = 0; i < excelDataFilter.length; i += 1) {
+                csvData.push([
+                [excelDataFilter[i].column_one], 
+                [excelDataFilter[i].column_two], 
+                [excelDataFilter[i].column_three], 
+                [excelDataFilter[i].column_four],  
+                [excelDataFilter[i].column_five], 
+                [excelDataFilter[i].column_six]
+              ]);
+            }
+            return csvData;
+    
+};
     
     useEffect(()=>{
 
@@ -216,85 +235,143 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
         })
       })
 
-      setInterval(() => {
-        fetch('../../api/servicos/Control/controlService', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }).then((resultControl) => {
-          fetch('../../api/servicos/Epis/episService', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }).then((resultEpi) => {
-            resultEpi.json().then((resEpi) => {
-              resultControl.json().then((resControl) => {
-                
-                var resultData = [];
-                resultData.push(["Data","Quantidate"]);
-                let resultRows = resControl.map(function(row) { 
-                  function findEpi(inv) {
-                    return inv["id"] === row["epi_id"];
-                  }
-                  let epiFinded = resEpi.find(findEpi)   
-      
-                  let startDate = new Date(row["start_date"]);   
-                  let endDate = new Date(row["end_date"]);                       
-                  let diff = endDate.getTime() - startDate.getTime();   
-                  
-                  let statusControl =  diff < 0 ? 'true' : 'false'
-                 // console.log(row["start_date"])
-                  return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
-                 // return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
-                });
-               
-                let ResultObject = resultRows.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null))/*.map(function(item) {
-                  console.log(item)
-                  //resultData.push(["Data","Quantidate"])
-                });*/
-                for (const [day, qtd] of Object.entries(ResultObject)) {
-                  resultData.push([day,qtd]);
-                }
-                //console.log(resultData)
-                
-                //.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null));
-                //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
-                //return
-                //console.log(resultRows)
-                setDataArray(resultData)
+      DataReturned();   
 
-                let rows = resControl.map(function(row) { 
-                  function findEpi(inv) {
-                    return inv["id"] === row["epi_id"];
-                  }
-                  let epiFinded = resEpi.find(findEpi)   
-  
-                  let startDate = new Date(row["start_date"]);   
-                  let endDate = new Date(row["end_date"]);                       
-                  let diff = endDate.getTime() - startDate.getTime();   
-                  
-                  let statusControl =  diff < 0 ? 'true' : 'false'
-                  return {
-                    "column_one": statusControl,
-                    "column_two": row["id"],
-                    "column_three": epiFinded.name,
-                    "column_four": row["description"],
-                    "column_five": row["start_date"],
-                    "column_six": row["end_date"]
-                  }
-                })
-                setExcelData(rows);
-              })
-            })
-          })
-        })
-        
+      setInterval(() => {
+        DataReturned();        
       }, 60000)
       
     },[]);
 
+    const DataReturned = () => {
+      fetch('../../api/servicos/Control/controlService', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((resultControl) => {
+        fetch('../../api/servicos/Epis/episService', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then((resultEpi) => {
+          resultEpi.json().then((resEpi) => {
+            resultControl.json().then((resControl) => {
+              
+              var resultData = [];
+              resultData.push(["Data","Quantidate"]);
+              let resultRows = resControl.map(function(row) { 
+                function findEpi(inv) {
+                  return inv["id"] === row["epi_id"];
+                }
+                let epiFinded = resEpi.find(findEpi)   
+    
+                let startDate = new Date(row["start_date"]);   
+                let endDate = new Date(row["end_date"]);                       
+                let diff = endDate.getTime() - startDate.getTime();   
+                
+                let statusControl =  diff < 0 ? 'true' : 'false'
+               // console.log(row["start_date"])
+               
+               if(selectedItemEpi == null || (epiFinded && epiFinded.name == selectedItemEpi)){
+                 console.log("selecionado" + selectedItemEpi + "encontrado" + epiFinded.name)
+                 console.log("periodo" + selectedItemPeriodo + "quantidade" + selectedItemQuantidade)
+                 if(selectedItemQuantidade != null){
+                  var dt = new Date();
+                  switch (selectedItemPeriodo) {
+                   case 'Ano':
+                     dt.setHours(dt.getFullYear() - Number(selectedItemQuantidade));
+                     break;
+                   case 'Mês':
+                     dt.setHours(dt.getMonth() - Number(selectedItemQuantidade));
+                     break;
+                   case 'Dia':
+                     dt.setHours(dt.getDay() - Number(selectedItemQuantidade));
+                     break;
+                   case 'Hora':
+                     dt.setHours(dt.getHours() - Number(selectedItemQuantidade));
+                     break;
+                   default:
+                    dt.setHours(dt.getHours() - 1);
+                  }
+                  if(new Date(row["start_date"]) > dt){
+                    return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
+                  }
+                 }else{
+                  return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
+                 }
+                 
+                 
+                 
+               }
+               
+               // return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
+              });
+             
+              let ResultObject = resultRows.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null))/*.map(function(item) {
+                console.log(item)
+                //resultData.push(["Data","Quantidate"])
+              });*/
+              for (const [day, qtd] of Object.entries(ResultObject)) {
+                resultData.push([day,qtd]);
+              }
+              //console.log(resultData)
+              
+              //.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null));
+              //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
+              //return
+              //console.log(resultRows)
+              setDataArray(resultData)
+
+              let rows = resControl.map(function(row) { 
+                function findEpi(inv) {
+                  return inv["id"] === row["epi_id"];
+                }
+                let epiFinded = resEpi.find(findEpi)   
+
+                let startDate = new Date(row["start_date"]);   
+                let endDate = new Date(row["end_date"]);                       
+                let diff = endDate.getTime() - startDate.getTime();   
+                
+                let statusControl =  diff < 0 ? 'true' : 'false'
+                return {
+                  "column_one": statusControl,
+                  "column_two": row["id"],
+                  "column_three": epiFinded.name,
+                  "column_four": row["description"],
+                  "column_five": row["start_date"],
+                  "column_six": row["end_date"]
+                }
+              })
+              setExcelData(rows);
+
+              let rowsFilter = resControl.map(function(row) { 
+                function findEpi(inv) {
+                  return inv["id"] === row["epi_id"];
+                }
+                let epiFinded = resEpi.find(findEpi)   
+
+                let startDate = new Date(row["start_date"]);   
+                let endDate = new Date(row["end_date"]);                       
+                let diff = endDate.getTime() - startDate.getTime();   
+                
+                let statusControl =  diff < 0 ? 'true' : 'false'
+                return {
+                  "column_one": statusControl,
+                  "column_two": row["id"],
+                  "column_three": epiFinded.name,
+                  "column_four": row["description"],
+                  "column_five": row["start_date"],
+                  "column_six": row["end_date"]
+                }
+              })
+              setExcelDataFilter(rowsFilter);
+            })
+          })
+        })
+      })
+    }
     
 
     return (
@@ -339,13 +416,13 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                   <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
                     <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
                       <Item>
-                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"} selectedItem={selectedItemEpi} setSelectedItem = {(comboItem) => {setSelectedItemEpi(comboItem)}}/>
+                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"} selectedItem={selectedItemEpi} setSelectedItem = {(comboItem) => {setSelectedItemEpi(comboItem); DataReturned();}}/>
                       </Item>
                       <Item>
-                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"} selectedItem={selectedItemPeriodo} setSelectedItem = {(comboItem) => {setSelectedItemPeriodo(comboItem)}}/>
+                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"} selectedItem={selectedItemPeriodo} setSelectedItem = {(comboItem) => {setSelectedItemPeriodo(comboItem); DataReturned();}}/>
                       </Item>
                       <Item>
-                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"} selectedItem={selectedItemQuantidade} setSelectedItem = {(comboItem) => {setSelectedItemQuantidade(comboItem)}}/>
+                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"} selectedItem={selectedItemQuantidade} setSelectedItem = {(comboItem) => {setSelectedItemQuantidade(comboItem); DataReturned();}}/>
                       </Item>
                     </Box>
                   </Grid>
@@ -354,15 +431,19 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                   <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{ height:"100%", width:"100%"}}>
                     <Box sx={{display:'grid', minHeight:"100%", minWidth:"100%", gridTemplateColumns: 'repeat(2, 1fr)', marginTop:"5vh",  marginLeft:"2vw"}}>
                       <Item >
-                        <CSVLink filename="O4F.csv" data={getCsvData()}>
+                        <CSVLink filename="DetecçõesCompletas.csv" data={getCsvData()}>
                           <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
                             <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
                           </Button>
                         </CSVLink>
                       </Item>
-                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
-                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionTwoTone sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
-                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionRounded sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
+                      <Item >
+                        <CSVLink filename="DetecçõesFiltradas.csv" data={getCsvDataFilter()}>
+                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
+                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                          </Button>
+                        </CSVLink>
+                      </Item>                      
                     </Box>
                   </Grid>
                 </Item>
