@@ -19,6 +19,20 @@ class ControlService{
         return result;
     }
 
+    async GetAllWithouImages(): Promise<Control[]>{
+
+        var result = await this._controlRepository.GetAllWithFilters({select: {
+            id:           true,
+            epi_id        :true,       
+            description   :true,   
+            start_date    :true,
+            end_date      :true,
+            start_image   :false,
+            end_image     :false,
+          }});
+        return result;
+    }
+
     async Update(entity:Control): Promise<Control>{
         if(await this.IsValidToUpdate(entity) && entity["id"] !=0){
             var result = await this._controlRepository.Update(entity);
@@ -144,13 +158,13 @@ export default async (req, res) => {
         case 'GET':
             if(req.query["Id"])
             {
-                result[0] = await controlService.Get(req.query["Id"]);
+                result[0] = await controlService.Get(Number(req.query["Id"]));
                 statusReturn = (200);
                 jsonReturn = ({result});
             }
             else if(Object.keys(req.query).length === 0)
             {
-                var controls = await controlService.GetAll();
+                var controls = await controlService.GetAllWithouImages();
                 let result = {};
                 result = controls;
                 statusReturn = (200);

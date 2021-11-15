@@ -18,6 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import { styled } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { CheckCircle, Delete, Cancel  } from '@material-ui/icons';
+import { debug } from 'console';
 
 const style = {
   position: 'absolute',
@@ -88,10 +89,21 @@ const columns = [
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = (item) => {
-      setImageStartSelected(item.start_image)
-      setImageEndSelected(item.end_image)
-      setOpen(true)
-      setIdSelected(item.id)
+      
+      fetch('../../api/servicos/Control/controlService?Id='+item.id, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((resultControl) => {
+        return resultControl.json();
+      }).then((data)=>{
+        
+        setImageStartSelected(data["result"][0].start_image);
+        setImageEndSelected(data["result"][0].end_image);
+        setOpen(true);
+        setIdSelected(item.id);
+      });
       
     }
     const handleClose = () => setOpen(false);
