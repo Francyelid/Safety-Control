@@ -15,6 +15,10 @@ const Combobox = (props) => {
         style={{ width: 300 }}
         renderInput={(params) =>
           <TextField {...params} label={props.unselect} variant="outlined" />}
+      value={props.selectedItem}
+        onChange={(_event, newItem) => {
+          props.setSelectedItem(newItem);
+        }}
       />
     </Grid>
   );

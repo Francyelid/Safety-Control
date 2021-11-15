@@ -138,6 +138,10 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     const [episArray, setEpisArray] = useState([]);
     const [dataArray, setDataArray] = useState([["Data","Quantidate"],["01/01/2000",0]]);
     const [excelData, setExcelData] = useState([]);
+    const [selectedItemEpi, setSelectedItemEpi] = useState(null);
+    const [selectedItemPeriodo, setSelectedItemPeriodo] = useState(null);
+    const [selectedItemQuantidade, setSelectedItemQuantidade] = useState(null);
+
 
     const getCsvData = () => {
       const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
@@ -335,13 +339,13 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                   <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
                     <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
                       <Item>
-                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"}/>
+                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"} selectedItem={selectedItemEpi} setSelectedItem = {(comboItem) => {setSelectedItemEpi(comboItem)}}/>
                       </Item>
                       <Item>
-                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"}/>
+                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"} selectedItem={selectedItemPeriodo} setSelectedItem = {(comboItem) => {setSelectedItemPeriodo(comboItem)}}/>
                       </Item>
                       <Item>
-                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"}/>
+                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"} selectedItem={selectedItemQuantidade} setSelectedItem = {(comboItem) => {setSelectedItemQuantidade(comboItem)}}/>
                       </Item>
                     </Box>
                   </Grid>
