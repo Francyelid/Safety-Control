@@ -140,10 +140,11 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     const [dataArray, setDataArray] = useState([["Data","Quantidate"],["01/01/2000",0]]);
     const [excelData, setExcelData] = useState([]);
     const [excelDataFilter, setExcelDataFilter] = useState([]);
+    const [excelDataFilterActive, setExcelDataFilterActive] = useState([]);
+    const [excelDataFilterInactive, setExcelDataFilterInactive] = useState([]);
     const [selectedItemEpi, setSelectedItemEpi] = useState(null);
     const [selectedItemPeriodo, setSelectedItemPeriodo] = useState(null);
     const [selectedItemQuantidade, setSelectedItemQuantidade] = useState(null);
-
 
     const getCsvData = () => {
       const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
@@ -179,7 +180,39 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
             return csvDataFilter;
     
 };
-    
+
+const getCsvDataFilterActive = () => {
+  const csvDataFilterActive = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
+  excelDataFilterActive.map((excel_item_a) => {
+            csvDataFilterActive.push([
+              [excel_item_a.column_one], 
+              [excel_item_a.column_two], 
+              [excel_item_a.column_three], 
+              [excel_item_a.column_four],  
+              [excel_item_a.column_five], 
+              [excel_item_a.column_six]
+            ]);
+          })
+          return csvDataFilterActive;
+  
+};
+
+const getCsvDataFilterInactive = () => {
+  const csvDataFilterInactive = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
+  excelDataFilterInactive.map((excel_item_i) => {
+            csvDataFilterInactive.push([
+              [excel_item_i.column_one], 
+              [excel_item_i.column_two], 
+              [excel_item_i.column_three], 
+              [excel_item_i.column_four],  
+              [excel_item_i.column_five], 
+              [excel_item_i.column_six]
+            ]);
+          })
+          return csvDataFilterInactive;
+  
+};
+
     useEffect(()=>{
 
       if(!session){
@@ -405,6 +438,58 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                
               })
               setExcelDataFilter(rowsFilter);
+
+
+              let rowsFilterA = resControl.map(function(row) { 
+                function findEpi(inv) {
+                  return inv["id"] === row["epi_id"];
+                }
+                let epiFinded = resEpi.find(findEpi)   
+
+                let startDate = new Date(row["start_date"]);   
+                let endDate = new Date(row["end_date"]);                       
+                let diff = endDate.getTime() - startDate.getTime();   
+                
+                let statusControl =  diff < 0 ? 'true' : 'false'
+                if(statusControl == 'true'){
+                  return {
+                    "column_one": statusControl,
+                    "column_two": row["id"],
+                    "column_three": epiFinded.name,
+                    "column_four": row["description"],
+                    "column_five": row["start_date"],
+                    "column_six": row["end_date"]
+                  }
+                }
+                
+              })
+              setExcelDataFilterActive(rowsFilterA);
+
+              let rowsFilterI = resControl.map(function(row) { 
+                function findEpi(inv) {
+                  return inv["id"] === row["epi_id"];
+                }
+                let epiFinded = resEpi.find(findEpi)   
+
+                let startDate = new Date(row["start_date"]);   
+                let endDate = new Date(row["end_date"]);                       
+                let diff = endDate.getTime() - startDate.getTime();   
+                
+                let statusControl =  diff < 0 ? 'true' : 'false'
+                if(statusControl == 'false'){
+                  return {
+                    "column_one": statusControl,
+                    "column_two": row["id"],
+                    "column_three": epiFinded.name,
+                    "column_four": row["description"],
+                    "column_five": row["start_date"],
+                    "column_six": row["end_date"]
+                  }
+                }
+                
+              })
+              setExcelDataFilterInactive(rowsFilterI);
+
             })
           })
         })
@@ -486,7 +571,21 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                             <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
                           </Button>
                         </CSVLink>
-                      </Item>                      
+                      </Item>           
+                      <Item >
+                        <CSVLink filename="DetecçõesFiltradasActive.csv" data={getCsvDataFilterActive()}>
+                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
+                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                          </Button>
+                        </CSVLink>
+                      </Item>  
+                      <Item >
+                        <CSVLink filename="DetecçõesFiltradasInactive.csv" data={getCsvDataFilterInactive()}>
+                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
+                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                          </Button>
+                        </CSVLink>
+                      </Item>             
                     </Box>
                   </Grid>
                 </Item>
