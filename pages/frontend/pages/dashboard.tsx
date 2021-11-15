@@ -276,18 +276,14 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                       },
                       title: 'Data vs. Quantidade Detecções',
                       vAxis: {
-                        title: 'Data', 
-                        /*viewWindow: {
-                          max: 0,
-                          min: 20,
-                        },*/
-                      },
-                      hAxis: {
-                        title: 'Quantidate',
+                        title: 'Quantidate',                         
                         viewWindow: {
                           max: 100,
                           min: 0,
                         },
+                      },
+                      hAxis: {
+                        title: 'Data',
                       },
                       legend: { position: 'none' },
                       enableInteractivity: true,
