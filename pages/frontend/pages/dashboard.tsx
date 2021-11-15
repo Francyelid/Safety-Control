@@ -357,14 +357,53 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                 let diff = endDate.getTime() - startDate.getTime();   
                 
                 let statusControl =  diff < 0 ? 'true' : 'false'
-                return {
-                  "column_one": statusControl,
-                  "column_two": row["id"],
-                  "column_three": epiFinded.name,
-                  "column_four": row["description"],
-                  "column_five": row["start_date"],
-                  "column_six": row["end_date"]
+
+                if(selectedItemEpi == null || (epiFinded && epiFinded.name == selectedItemEpi)){
+                  console.log("selecionado" + selectedItemEpi + "encontrado" + epiFinded.name)
+                  console.log("periodo" + selectedItemPeriodo + "quantidade" + selectedItemQuantidade)
+                  if(selectedItemQuantidade != null){
+                   var dt = new Date();
+                   switch (selectedItemPeriodo) {
+                    case 'Ano':
+                      dt.setHours(dt.getFullYear() - Number(selectedItemQuantidade));
+                      break;
+                    case 'Mês':
+                      dt.setHours(dt.getMonth() - Number(selectedItemQuantidade));
+                      break;
+                    case 'Dia':
+                      dt.setHours(dt.getDay() - Number(selectedItemQuantidade));
+                      break;
+                    case 'Hora':
+                      dt.setHours(dt.getHours() - Number(selectedItemQuantidade));
+                      break;
+                    default:
+                     dt.setHours(dt.getHours() - 1);
+                   }
+                   if(new Date(row["start_date"]) > dt){
+                    return {
+                      "column_one": statusControl,
+                      "column_two": row["id"],
+                      "column_three": epiFinded.name,
+                      "column_four": row["description"],
+                      "column_five": row["start_date"],
+                      "column_six": row["end_date"]
+                    }
+                   }
+                  }else{
+                    return {
+                      "column_one": statusControl,
+                      "column_two": row["id"],
+                      "column_three": epiFinded.name,
+                      "column_four": row["description"],
+                      "column_five": row["start_date"],
+                      "column_six": row["end_date"]
+                    }
+                  }
+                  
+                  
+                  
                 }
+               
               })
               setExcelDataFilter(rowsFilter);
             })
