@@ -13,9 +13,11 @@ import { title } from 'process';
 
 import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
 import { Description, DescriptionOutlined, DescriptionRounded, DescriptionTwoTone } from '@material-ui/icons'
-
+/*
 const generateData = () => {
-  var randomNumber1 = Math.floor(Math.random() * 20) + 1;
+  
+  return 
+ var randomNumber1 = Math.floor(Math.random() * 20) + 1;
   var randomNumber2 = Math.floor(Math.random() * 20) + 1;
   var randomNumber3 = Math.floor(Math.random() * 20) + 1;
   var randomNumber4 = Math.floor(Math.random() * 20) + 1;
@@ -29,6 +31,7 @@ const generateData = () => {
     [randomNumber5, randomNumber6],[randomNumber7, randomNumber8],[randomNumber9, randomNumber3],[randomNumber2, randomNumber1]
   ];
 }
+*/
 
 function Item(props: BoxProps) {
   const { sx, ...other } = props;
@@ -49,63 +52,8 @@ function Item(props: BoxProps) {
   );
 }
 
-class Component extends React.Component<{}, { chartData: (string[] | number[])[] }> {
-  constructor(props) {
-    super(props);
-    this.state ={ 
-      chartData: generateData() 
-    };
-  }
 
-  componentDidMount() {
-    setInterval(() => {
-      this.setState(
-        { 
-          chartData: generateData() 
-        }
-      );
-    }, 3000)
-  }
-
-  render () {
-    return (
-      <Chart 
-        height="35vh"
-        chartType="ScatterChart"
-        loader={<div>Loading Chart</div>}
-        data={this.state.chartData}
-        options={{
-          colors: ['#8e0152', '#276419'],
-          pointSize: 10,
-          animation: {
-            duration: 1000,
-            easing: 'out',
-            startup: true,
-          },
-          title: 'Age vs. Weight comparison',
-          vAxis: {
-            title: 'Age', 
-            viewWindow: {
-              max: 0,
-              min: 20,
-            },
-          },
-          hAxis: {
-            title: 'Weight',
-            viewWindow: {
-              max: 25,
-              min: 0,
-            },
-          },
-          legend: { position: 'none' },
-          enableInteractivity: true,
-        }}
-        rootProps={{ 'data-testid': '2' }}
-      />
-    )
-  }
-}
-
+/*
 
 const generateDataColuna = () => {
   var randomNumber1 = Math.floor(Math.random() * 1000) + 1;
@@ -175,7 +123,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     )
   }
 }
-
+*/
 
   const quantityArray = Array(30).fill(0).map((e, i)=> e = i+1)
   const periodTypeArray = ['Ano', 'Mês', 'Dia', 'Hora']
@@ -188,14 +136,51 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
 
     const  [session] = useSession();
     const [episArray, setEpisArray] = useState([]);
+    const [dataArray, setDataArray] = useState([["Data","Quantidate"],["01/01/2000",0]]);
+    
     
     useEffect(()=>{
 
       if(!session){
         Router.push('../../');
       }
-
       
+      fetch('../../api/servicos/Control/controlService', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((resultControl) => {
+        fetch('../../api/servicos/Epis/episService', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then((resultEpi) => {
+          resultEpi.json().then((resEpi) => {
+            resultControl.json().then((resControl) => {
+              
+              let resultRows = resControl.map(function(row) { 
+                function findEpi(inv) {
+                  return inv["id"] === row["epi_id"];
+                }
+                let epiFinded = resEpi.find(findEpi)   
+    
+                let startDate = new Date(row["start_date"]);   
+                let endDate = new Date(row["end_date"]);                       
+                let diff = endDate.getTime() - startDate.getTime();   
+                
+                let statusControl =  diff < 0 ? 'true' : 'false'
+                //console.log(row["start_date"])
+                return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
+              })//.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null));
+              //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
+              //console.log(resultRows)
+            })
+          })
+        })
+      })
+
       fetch('../../api/servicos/Epis/episService', {
         method: 'GET',
         headers: {
@@ -209,9 +194,65 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
           setEpisArray(episName);
         })
       })
+
+      setInterval(() => {
+        fetch('../../api/servicos/Control/controlService', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then((resultControl) => {
+          fetch('../../api/servicos/Epis/episService', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then((resultEpi) => {
+            resultEpi.json().then((resEpi) => {
+              resultControl.json().then((resControl) => {
+                
+                var resultData = [];
+                resultData.push(["Data","Quantidate"]);
+                let resultRows = resControl.map(function(row) { 
+                  function findEpi(inv) {
+                    return inv["id"] === row["epi_id"];
+                  }
+                  let epiFinded = resEpi.find(findEpi)   
+      
+                  let startDate = new Date(row["start_date"]);   
+                  let endDate = new Date(row["end_date"]);                       
+                  let diff = endDate.getTime() - startDate.getTime();   
+                  
+                  let statusControl =  diff < 0 ? 'true' : 'false'
+                 // console.log(row["start_date"])
+                  return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
+                 // return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
+                });
+                
+                let ResultObject = resultRows.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null))/*.map(function(item) {
+                  console.log(item)
+                  //resultData.push(["Data","Quantidate"])
+                });*/
+                for (const [day, qtd] of Object.entries(ResultObject)) {
+                  resultData.push([day,qtd]);
+                }
+                console.log(resultData)
+                
+                //.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null));
+                //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
+                //return
+                console.log(resultRows)
+                setDataArray(resultData)
+              })
+            })
+          })
+        })
+        
+      }, 60000)
       
     },[]);
 
+    
 
     return (
       <DashboardLayout>
@@ -220,7 +261,39 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
               <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', minHeight:"100%", minWidth:"100%"}}>
                 <Item style={{minHeight:"100%",  minWidth:"100%"}}>
                   <div>
-                    <Component/>
+                  <Chart 
+                    height="35vh"
+                    chartType="ScatterChart"
+                    loader={<div>Loading Chart</div>}
+                    data={dataArray}
+                    options={{
+                      colors: ['#8e0152', '#276419'],
+                      pointSize: 10,
+                      animation: {
+                        duration: 1000,
+                        easing: 'out',
+                        startup: true,
+                      },
+                      title: 'Data vs. Quantidade Detecções',
+                      vAxis: {
+                        title: 'Data', 
+                        /*viewWindow: {
+                          max: 0,
+                          min: 20,
+                        },*/
+                      },
+                      hAxis: {
+                        title: 'Quantidate',
+                        viewWindow: {
+                          max: 100,
+                          min: 0,
+                        },
+                      },
+                      legend: { position: 'none' },
+                      enableInteractivity: true,
+                    }}
+                    rootProps={{ 'data-testid': '2' }}
+                  />
                   </div>
                 </Item>
                 <Item style={{minHeight:"100%",  minWidth:"100%"}}>
@@ -237,11 +310,6 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                       </Item>
                     </Box>
                   </Grid>
-                </Item>
-                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
-                  <div>
-                    <ComponentColuna/>
-                  </div>
                 </Item>
                 <Item style={{minHeight:"100%",  minWidth:"100%"}}>
                   <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{ height:"100%", width:"100%"}}>
@@ -261,3 +329,11 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   }
   
 export default Dashboard;
+/*
+
+                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                  <div>
+                    <ComponentColuna/>
+                  </div>
+                </Item>
+*/
