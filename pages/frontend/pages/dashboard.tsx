@@ -185,7 +185,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
         Router.push('../../');
       }
       
-      fetch('../../api/servicos/Control/controlService', {
+     /* fetch('../../api/servicos/Control/controlService', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -219,7 +219,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
             })
           })
         })
-      })
+      })*/
 
       fetch('../../api/servicos/Epis/episService', {
         method: 'GET',
