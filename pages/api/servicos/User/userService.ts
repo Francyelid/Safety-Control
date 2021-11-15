@@ -17,6 +17,19 @@ class UserService{
         return result;
     }
 
+    async GetByEmail(email:string): Promise<User>{
+
+        var result = await this._userRepository.GetAllWithFilters({
+            where:{
+                AND:[
+                    {email: email}
+                ]
+            }
+        });
+
+        return result[0];
+    }
+
     async GetAuthentication(email:string, password:string): Promise<User>{
 
         var result = await this._userRepository.GetAllWithFilters({
@@ -54,6 +67,29 @@ class UserService{
         }else{
             return null;
         }
+    }
+
+    async UpdatePassword(oldPass: string, newPass : string, email:string): Promise<User>
+    {
+        if(!newPass)
+        {
+            this._listErrors["SenhaVazia"] = "Nova senha precisa ser preenchida";
+            return null;
+        }
+        var auth = await this.GetAuthentication(email, oldPass);
+        if(!auth || auth == null)
+        {
+            this._listErrors["SenhaIncorreta"] = "Senha atual incorreta.";
+            return null;
+        }else{
+            var user = await this.GetByEmail(email);
+            console.log(user);
+            var hashPass = await bcrypt.hash(newPass, 10);
+            user.password = hashPass;
+            var updated = await this._userRepository.Update(user);
+            return updated;
+        }
+
     }
 
     async Create(entity:User): Promise<User>{
@@ -184,16 +220,29 @@ export default async (req, res) => {
             break;
         case 'PUT':
             if(auth){
-                var entity = req.body.user as User;
-                var updated = await userService.Update(entity);
-                if(updated != null)
+                if(req.body["newPass"])
                 {
-                    statusReturn = (200);
-                    jsonReturn = (updated);
-                }
-                else{
-                    statusReturn = (200);
-                    jsonReturn = ({error:userService._listErrors});
+                    var updatedPass = await userService.UpdatePassword(req.body["oldPass"], req.body["newPass"], session.user.email);
+                    if(updatedPass != null)
+                    {
+                        statusReturn = (200);
+                        jsonReturn = (updatedPass);
+                    }else{
+                        statusReturn = (200);
+                        jsonReturn = ({error:userService._listErrors});
+                    }
+                }else{
+                    var entity = req.body.user as User;
+                    var updated = await userService.Update(entity);
+                    if(updated != null)
+                    {
+                        statusReturn = (200);
+                        jsonReturn = (updated);
+                    }
+                    else{
+                        statusReturn = (200);
+                        jsonReturn = ({error:userService._listErrors});
+                    }
                 }
             }else{
                 statusReturn = (200);
