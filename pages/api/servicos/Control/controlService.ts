@@ -69,6 +69,15 @@ class ControlService{
             result= false;
         }
 
+        if(!entity["start_date"] || entity["start_date"] === "")
+        {
+            this._listErrors["StartDateObrigatorio"] = "start_date precisa ser preenchido";
+            result= false;
+        }else{
+            entity["start_date"] = new Date(entity["start_date"])
+
+        }
+
         return result;
     }
 
