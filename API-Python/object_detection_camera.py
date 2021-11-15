@@ -121,7 +121,7 @@ to_update = {}
 def Insert(frame_rec):
   global to_update
   urlpost = 'https://safety-control.vercel.app/api/servicos/Control/controlService'
-  # urlpost = 'http://localhost:3000/api/servicos/Control/controlService'
+  #urlpost = 'http://localhost:3000/api/servicos/Control/controlService'
   retval_rec, buffer_rec = cv2.imencode('.jpg', frame_rec)
   frame_converted_i = base64.b64encode(buffer_rec)
   #frame_converted_i = base64.b64encode(frame_rec)
@@ -134,6 +134,7 @@ def Insert(frame_rec):
                 "epi_id"       : 1,       
                 "description"   : "detectado sem capacete", 
                 "start_image"   : str(frame_converted_i),
+                'start_date'      : str(datetime.datetime.today()),
                 "end_date": "2012-04-23T18:25:43.511Z"
               } }
   #print(print(json.dumps({"c": 0, "b": 0, "a": 0}, sort_keys=True))
@@ -144,7 +145,7 @@ def Insert(frame_rec):
   #arquivo.close()
   
   response_post = requests.post(urlpost, data=json.dumps(control_i, sort_keys=True), headers={"Content-Type": "application/json"})
-  
+  #print(response_post)
   #print(response_post.status_code)     
   if response_post.status_code == 200:
     to_update = response_post.json()
@@ -200,9 +201,10 @@ while(cap.isOpened()):
           if int(boxes_itens[0][0][1]) > int(75):
             no_detect_fames = 0
             detect_fames = int(detect_fames) + 1
-            if(int(detect_fames) >= 5 & sended == False):     
-              print("Insert")   
-              sended = Insert(frame)
+            if(int(detect_fames) >= 5):   
+              if(sended == False):  
+                print("Insert")   
+                sended = Insert(frame)
           else:
             detect_fames = 0
             no_detect_fames = int(no_detect_fames) + 1
