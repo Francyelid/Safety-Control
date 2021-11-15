@@ -12,7 +12,7 @@ import Combobox from '../components/Combobox';
 import { title } from 'process';
 
 import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
-import { Description, DescriptionOutlined, DescriptionRounded, DescriptionTwoTone } from '@material-ui/icons'
+import { Description, DescriptionOutlined, DescriptionRounded, DescriptionTwoTone, UpdateOutlined } from '@material-ui/icons'
 /*
 const generateData = () => {
   
@@ -147,35 +147,36 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
 
     const getCsvData = () => {
       const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
-              let i;
-              for (i = 0; i < excelData.length; i += 1) {
-                  csvData.push([
-                  [excelData[i].column_one], 
-                  [excelData[i].column_two], 
-                  [excelData[i].column_three], 
-                  [excelData[i].column_four],  
-                  [excelData[i].column_five], 
-                  [excelData[i].column_six]
+
+              excelData.map((excel_item) => {
+                csvData.push([
+                  [excel_item.column_one], 
+                  [excel_item.column_two], 
+                  [excel_item.column_three], 
+                  [excel_item.column_four],  
+                  [excel_item.column_five], 
+                  [excel_item.column_six]
                 ]);
-              }
+              })
+                  
+              
               return csvData;
       
   };
 
   const getCsvDataFilter = () => {
-    const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
-            let i;
-            for (i = 0; i < excelDataFilter.length; i += 1) {
-                csvData.push([
-                [excelDataFilter[i].column_one], 
-                [excelDataFilter[i].column_two], 
-                [excelDataFilter[i].column_three], 
-                [excelDataFilter[i].column_four],  
-                [excelDataFilter[i].column_five], 
-                [excelDataFilter[i].column_six]
+    const csvDataFilter = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
+            excelDataFilter.map((excel_item_f) => {
+              csvDataFilter.push([
+                [excel_item_f.column_one], 
+                [excel_item_f.column_two], 
+                [excel_item_f.column_three], 
+                [excel_item_f.column_four],  
+                [excel_item_f.column_five], 
+                [excel_item_f.column_six]
               ]);
-            }
-            return csvData;
+            })
+            return csvDataFilter;
     
 };
     
@@ -239,7 +240,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
 
       setInterval(() => {
         DataReturned();        
-      }, 60000)
+      }, 600000)
       
     },[]);
 
@@ -261,6 +262,8 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
               
               var resultData = [];
               resultData.push(["Data","Quantidate"]);
+              console.log("selecionado" + selectedItemEpi)
+              console.log("periodo" + selectedItemPeriodo + " quantidade" + selectedItemQuantidade)
               let resultRows = resControl.map(function(row) { 
                 function findEpi(inv) {
                   return inv["id"] === row["epi_id"];
@@ -275,19 +278,17 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                // console.log(row["start_date"])
                
                if(selectedItemEpi == null || (epiFinded && epiFinded.name == selectedItemEpi)){
-                 console.log("selecionado" + selectedItemEpi + "encontrado" + epiFinded.name)
-                 console.log("periodo" + selectedItemPeriodo + "quantidade" + selectedItemQuantidade)
                  if(selectedItemQuantidade != null){
                   var dt = new Date();
                   switch (selectedItemPeriodo) {
                    case 'Ano':
-                     dt.setHours(dt.getFullYear() - Number(selectedItemQuantidade));
+                     dt.setFullYear(dt.getFullYear() - Number(selectedItemQuantidade));
                      break;
                    case 'Mês':
-                     dt.setHours(dt.getMonth() - Number(selectedItemQuantidade));
+                     dt.setMonth(dt.getMonth() - Number(selectedItemQuantidade));
                      break;
                    case 'Dia':
-                     dt.setHours(dt.getDay() - Number(selectedItemQuantidade));
+                     dt.setDate(dt.getDay() - Number(selectedItemQuantidade));
                      break;
                    case 'Hora':
                      dt.setHours(dt.getHours() - Number(selectedItemQuantidade));
@@ -359,19 +360,17 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                 let statusControl =  diff < 0 ? 'true' : 'false'
 
                 if(selectedItemEpi == null || (epiFinded && epiFinded.name == selectedItemEpi)){
-                  console.log("selecionado" + selectedItemEpi + "encontrado" + epiFinded.name)
-                  console.log("periodo" + selectedItemPeriodo + "quantidade" + selectedItemQuantidade)
                   if(selectedItemQuantidade != null){
                    var dt = new Date();
                    switch (selectedItemPeriodo) {
                     case 'Ano':
-                      dt.setHours(dt.getFullYear() - Number(selectedItemQuantidade));
+                      dt.setFullYear(dt.getFullYear() - Number(selectedItemQuantidade));
                       break;
                     case 'Mês':
-                      dt.setHours(dt.getMonth() - Number(selectedItemQuantidade));
+                      dt.setMonth(dt.getMonth() - Number(selectedItemQuantidade));
                       break;
                     case 'Dia':
-                      dt.setHours(dt.getDay() - Number(selectedItemQuantidade));
+                      dt.setDate(dt.getDay() - Number(selectedItemQuantidade));
                       break;
                     case 'Hora':
                       dt.setHours(dt.getHours() - Number(selectedItemQuantidade));
@@ -455,13 +454,18 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                   <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
                     <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
                       <Item>
-                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"} selectedItem={selectedItemEpi} setSelectedItem = {(comboItem) => {setSelectedItemEpi(comboItem); DataReturned();}}/>
+                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"} selectedItem={selectedItemEpi} setSelectedItem = {(comboItem) => {setSelectedItemEpi(comboItem);}}/>
                       </Item>
                       <Item>
-                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"} selectedItem={selectedItemPeriodo} setSelectedItem = {(comboItem) => {setSelectedItemPeriodo(comboItem); DataReturned();}}/>
+                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"} selectedItem={selectedItemPeriodo} setSelectedItem = {(comboItemP) => {setSelectedItemPeriodo(comboItemP);}}/>
                       </Item>
                       <Item>
-                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"} selectedItem={selectedItemQuantidade} setSelectedItem = {(comboItem) => {setSelectedItemQuantidade(comboItem); DataReturned();}}/>
+                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"} selectedItem={selectedItemQuantidade} setSelectedItem = {(comboItemQ) => {setSelectedItemQuantidade(comboItemQ);}}/>
+                      </Item>
+                      <Item >
+                          <Button style={{height:"100%"}} fullWidth onClick={() => DataReturned()} color="primary" size="large" variant = "contained" type="button" >
+                            <UpdateOutlined sx={{ fontSize: 40 }} name="update"  />
+                          </Button>
                       </Item>
                     </Box>
                   </Grid>
@@ -501,4 +505,8 @@ export default Dashboard;
                     <ComponentColuna/>
                   </div>
                 </Item>
+
+                
+                         
+                       
 */
