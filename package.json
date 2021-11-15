@@ -34,6 +34,7 @@
     "next-auth": "^3.29.0",
     "npm": "^7.24.1",
     "react": "^16.14.0",
+    "react-csv": "^2.0.3",
     "react-dom": "^16.14.0",
     "react-google-charts": "^3.0.15",
     "react-markdown": "5.0.2",

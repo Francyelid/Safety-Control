@@ -13,7 +13,9 @@ const Signup = () => {
     fetch('api/users', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        //'Content-Type': 'application/json',
+        'User-Agent': '*',
+        Accept: 'application/json, text/plain, /',
       },
       body: JSON.stringify({
         email,

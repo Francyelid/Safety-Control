@@ -7,7 +7,7 @@ import Chart from "react-google-charts";
 import { generateKeyPair } from "crypto";
 import { type } from "os";
 import { renderers } from "react-markdown";
-
+import { CSVLink } from 'react-csv';
 import Combobox from '../components/Combobox';
 import { title } from 'process';
 
@@ -137,7 +137,24 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     const  [session] = useSession();
     const [episArray, setEpisArray] = useState([]);
     const [dataArray, setDataArray] = useState([["Data","Quantidate"],["01/01/2000",0]]);
-    
+    const [excelData, setExcelData] = useState([]);
+
+    const getCsvData = () => {
+      const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
+              let i;
+              for (i = 0; i < excelData.length; i += 1) {
+                  csvData.push([
+                  [excelData[i].column_one], 
+                  [excelData[i].column_two], 
+                  [excelData[i].column_three], 
+                  [excelData[i].column_four],  
+                  [excelData[i].column_five], 
+                  [excelData[i].column_six]
+                ]);
+              }
+              return csvData;
+      
+  };
     
     useEffect(()=>{
 
@@ -228,7 +245,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                   return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
                  // return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
                 });
-                
+               
                 let ResultObject = resultRows.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null))/*.map(function(item) {
                   console.log(item)
                   //resultData.push(["Data","Quantidate"])
@@ -236,13 +253,35 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                 for (const [day, qtd] of Object.entries(ResultObject)) {
                   resultData.push([day,qtd]);
                 }
-                console.log(resultData)
+                //console.log(resultData)
                 
                 //.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null));
                 //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
                 //return
-                console.log(resultRows)
+                //console.log(resultRows)
                 setDataArray(resultData)
+
+                let rows = resControl.map(function(row) { 
+                  function findEpi(inv) {
+                    return inv["id"] === row["epi_id"];
+                  }
+                  let epiFinded = resEpi.find(findEpi)   
+  
+                  let startDate = new Date(row["start_date"]);   
+                  let endDate = new Date(row["end_date"]);                       
+                  let diff = endDate.getTime() - startDate.getTime();   
+                  
+                  let statusControl =  diff < 0 ? 'true' : 'false'
+                  return {
+                    "column_one": statusControl,
+                    "column_two": row["id"],
+                    "column_three": epiFinded.name,
+                    "column_four": row["description"],
+                    "column_five": row["start_date"],
+                    "column_six": row["end_date"]
+                  }
+                })
+                setExcelData(rows);
               })
             })
           })
@@ -310,7 +349,13 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
                 <Item style={{minHeight:"100%",  minWidth:"100%"}}>
                   <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{ height:"100%", width:"100%"}}>
                     <Box sx={{display:'grid', minHeight:"100%", minWidth:"100%", gridTemplateColumns: 'repeat(2, 1fr)', marginTop:"5vh",  marginLeft:"2vw"}}>
-                      <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><Description sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
+                      <Item >
+                        <CSVLink filename="O4F.csv" data={getCsvData()}>
+                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
+                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                          </Button>
+                        </CSVLink>
+                      </Item>
                       <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
                       <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionTwoTone sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
                       <Item ><Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="secondary" size="large" variant = "contained" type="button" ><DescriptionRounded sx={{ fontSize: 40 }} name="instagram"  /></Button></Item>
