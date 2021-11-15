@@ -125,7 +125,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
 }
 */
 
-  const quantityArray = Array(30).fill(0).map((e, i)=> e = i+1)
+  const quantityArray = Array(30).fill(0).map((e, i)=> e = (i+1).toString())
   const periodTypeArray = ['Ano', 'Mês', 'Dia', 'Hora']
   const periodTypeObject = { 'Ano':1, 'Mês':2, 'Dia':3, 'Hora':4}
 
