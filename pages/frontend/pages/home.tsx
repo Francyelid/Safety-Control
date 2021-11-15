@@ -146,7 +146,7 @@ function Item(props: BoxProps) {
                         easing: 'out',
                         startup: true,
                       },
-                      title: 'Data vs. Quantidade Detecções',
+                      title: 'Data vs. Quantidade Detecções (Registradas Recentemente)',
                       vAxis: {
                         title: 'Quantidate',                         
                         viewWindow: {
@@ -174,12 +174,12 @@ function Item(props: BoxProps) {
                       </Item>
                       <Item >
                           <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="primary" size="large" variant = "contained" type="button" >
-                            <TextField value={now} inputProps={{ readOnly: true  }}></TextField>
+                            <TextField label={"Detecções Ativas"} value={now} inputProps={{ readOnly: true  }}></TextField>
                           </Button>
                       </Item>
                       <Item >
                           <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="primary" size="large" variant = "contained" type="button" >
-                          <TextField   value={ocurred} inputProps={{ readOnly: true  }}></TextField>
+                          <TextField   label={"Detecções Recentes Registradas"} value={ocurred} inputProps={{ readOnly: true  }}></TextField>
                           </Button>
                       </Item>
                     </Box>
