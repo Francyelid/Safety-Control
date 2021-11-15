@@ -106,10 +106,11 @@ def run_inference_for_single_image(model, image):
 # print(i)
 
 #cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture("../../../imagens/WIN_20211031_14_57_28_Pro.mp4")
+cap = cv2.VideoCapture("../../../imagens/WIN_20211115_14_32_01_Pro.mp4")
 # cap.open("http://192.168.1.4:8080/video")
 
 detect_fames = 0
+no_detect_fames = 0
 sended = False
 
 to_update = {}
@@ -119,8 +120,8 @@ to_update = {}
 
 def Insert(frame_rec):
   global to_update
-  #urlpost = 'https://safety-control.vercel.app/api/servicos/Control/controlService'
-  urlpost = 'http://localhost:3000/api/servicos/Control/controlService'
+  urlpost = 'https://safety-control.vercel.app/api/servicos/Control/controlService'
+  # urlpost = 'http://localhost:3000/api/servicos/Control/controlService'
   retval_rec, buffer_rec = cv2.imencode('.jpg', frame_rec)
   frame_converted_i = base64.b64encode(buffer_rec)
   #frame_converted_i = base64.b64encode(frame_rec)
@@ -144,21 +145,21 @@ def Insert(frame_rec):
   
   response_post = requests.post(urlpost, data=json.dumps(control_i, sort_keys=True), headers={"Content-Type": "application/json"})
   
-  print(response_post.status_code)     
+  #print(response_post.status_code)     
   if response_post.status_code == 200:
     to_update = response_post.json()
-    print(response_post.json())     
+    #print(response_post.json())     
     return True
 
 def Update(frame_rec_u):
   global to_update
- # urlput = 'https://safety-control.vercel.app/api/servicos/Control/controlService'
-  urlput = 'http://localhost:3000/api/servicos/Control/controlService'
+  urlput = 'https://safety-control.vercel.app/api/servicos/Control/controlService'
+  # urlput = 'http://localhost:3000/api/servicos/Control/controlService'
   retval, buffer_rec_u = cv2.imencode('.jpg', frame_rec_u)
   frame_converted_u = base64.b64encode(buffer_rec_u)
   #frame_converted_u = base64.b64encode(frame_rec_u)
-  print(to_update) 
-  print(to_update["id"]) 
+  #print(to_update) 
+  #print(to_update["id"]) 
   control_u = { "Control" : {
                 'id' : to_update["id"],
                 'epi_id'        : 1,      
@@ -167,10 +168,10 @@ def Update(frame_rec_u):
                 'end_image'   : str(frame_converted_u)
               }}   
   response_put = requests.put(urlput, data=json.dumps(control_u, sort_keys=True), headers={"Content-Type": "application/json"})
-  print(response_put.status_code)     
+  #print(response_put.status_code)     
   if response_put.status_code == 200:
-    print(response_put.json()) 
-    print(response_put)             
+    #print(response_put.json()) 
+    #print(response_put)             
     return False
 
 while(cap.isOpened()):
@@ -197,21 +198,32 @@ while(cap.isOpened()):
       if boxes_itens != [[]]:
         if str(boxes_itens[0][0][0]) == str('No_Helmet'):
           if int(boxes_itens[0][0][1]) > int(75):
+            no_detect_fames = 0
             detect_fames = int(detect_fames) + 1
-            if(int(detect_fames) == 5):        
+            if(int(detect_fames) >= 5 & sended == False):     
+              print("Insert")   
               sended = Insert(frame)
           else:
             detect_fames = 0
-            if(sended):     
-              sended = Update(frame)    
+            no_detect_fames = int(no_detect_fames) + 1
+            if(sended):  
+              if(int(no_detect_fames) >= 5):  
+                print("Update")  
+                sended = Update(frame)    
         else:
           detect_fames = 0
-          if(sended):   
-              sended = Update(frame) 
+          no_detect_fames = int(no_detect_fames) + 1
+          if(sended):  
+              if(int(no_detect_fames) >= 5):   
+                print("Update") 
+                sended = Update(frame) 
       else:
           detect_fames = 0
-          if(sended):       
-            sended = Update(frame)    
+          no_detect_fames = int(no_detect_fames) + 1
+          if(sended):  
+              if(int(no_detect_fames) >= 5):   
+                print("Update") 
+                sended = Update(frame)   
 
       if cv2.waitKey(1) & 0xFF == ord('q'):
           break
