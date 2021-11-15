@@ -174,12 +174,12 @@ function Item(props: BoxProps) {
                       </Item>
                       <Item >
                           <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="primary" size="large" variant = "contained" type="button" >
-                            <TextField label={now} inputProps={{ readOnly: true  }}></TextField>
+                            <TextField value={now} inputProps={{ readOnly: true  }}></TextField>
                           </Button>
                       </Item>
                       <Item >
                           <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="primary" size="large" variant = "contained" type="button" >
-                          <TextField   label={ocurred} inputProps={{ readOnly: true  }}></TextField>
+                          <TextField   value={ocurred} inputProps={{ readOnly: true  }}></TextField>
                           </Button>
                       </Item>
                     </Box>
