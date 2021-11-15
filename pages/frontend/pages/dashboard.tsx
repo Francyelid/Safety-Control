@@ -358,6 +358,10 @@ const getCsvDataFilterInactive = () => {
               //console.log(resultRows)
               setDataArray(resultData)
 
+
+              var rowsFilterA = [];
+              var rowsFilterI = [];
+
               let rows = resControl.map(function(row) { 
                 function findEpi(inv) {
                   return inv["id"] === row["epi_id"];
@@ -369,6 +373,26 @@ const getCsvDataFilterInactive = () => {
                 let diff = endDate.getTime() - startDate.getTime();   
                 
                 let statusControl =  diff < 0 ? 'true' : 'false'
+                if(statusControl == 'true'){
+                  rowsFilterA.push( {
+                    "column_one": statusControl,
+                    "column_two": row["id"],
+                    "column_three": epiFinded.name,
+                    "column_four": row["description"],
+                    "column_five": row["start_date"],
+                    "column_six": row["end_date"]
+                  })
+                }
+                if(statusControl == 'false'){
+                  rowsFilterI.push( {
+                    "column_one": statusControl,
+                    "column_two": row["id"],
+                    "column_three": epiFinded.name,
+                    "column_four": row["description"],
+                    "column_five": row["start_date"],
+                    "column_six": row["end_date"]
+                  })
+                }
                 return {
                   "column_one": statusControl,
                   "column_two": row["id"],
@@ -379,6 +403,8 @@ const getCsvDataFilterInactive = () => {
                 }
               })
               setExcelData(rows);
+              setExcelDataFilterActive(rowsFilterA);
+              setExcelDataFilterInactive(rowsFilterI);
 
               let rowsFilter = resControl.map(function(row) { 
                 function findEpi(inv) {
@@ -440,55 +466,10 @@ const getCsvDataFilterInactive = () => {
               setExcelDataFilter(rowsFilter);
 
 
-              let rowsFilterA = resControl.map(function(row) { 
-                function findEpi(inv) {
-                  return inv["id"] === row["epi_id"];
-                }
-                let epiFinded = resEpi.find(findEpi)   
+              
 
-                let startDate = new Date(row["start_date"]);   
-                let endDate = new Date(row["end_date"]);                       
-                let diff = endDate.getTime() - startDate.getTime();   
-                
-                let statusControl =  diff < 0 ? 'true' : 'false'
-                if(statusControl == 'true'){
-                  return {
-                    "column_one": statusControl,
-                    "column_two": row["id"],
-                    "column_three": epiFinded.name,
-                    "column_four": row["description"],
-                    "column_five": row["start_date"],
-                    "column_six": row["end_date"]
-                  }
-                }
-                
-              })
-              setExcelDataFilterActive(rowsFilterA);
-
-              let rowsFilterI = resControl.map(function(row) { 
-                function findEpi(inv) {
-                  return inv["id"] === row["epi_id"];
-                }
-                let epiFinded = resEpi.find(findEpi)   
-
-                let startDate = new Date(row["start_date"]);   
-                let endDate = new Date(row["end_date"]);                       
-                let diff = endDate.getTime() - startDate.getTime();   
-                
-                let statusControl =  diff < 0 ? 'true' : 'false'
-                if(statusControl == 'false'){
-                  return {
-                    "column_one": statusControl,
-                    "column_two": row["id"],
-                    "column_three": epiFinded.name,
-                    "column_four": row["description"],
-                    "column_five": row["start_date"],
-                    "column_six": row["end_date"]
-                  }
-                }
-                
-              })
-              setExcelDataFilterInactive(rowsFilterI);
+             
+              
 
             })
           })
@@ -572,7 +553,7 @@ const getCsvDataFilterInactive = () => {
                           </Button>
                         </CSVLink>
                       </Item>           
-                      {/*<Item >
+                      <Item >
                         <CSVLink filename="DetecçõesFiltradasActive.csv" data={getCsvDataFilterActive()}>
                           <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
                             <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
@@ -585,7 +566,7 @@ const getCsvDataFilterInactive = () => {
                             <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
                           </Button>
                         </CSVLink>
-                      </Item>*/  }           
+                      </Item>          
                     </Box>
                   </Grid>
                 </Item>
