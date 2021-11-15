@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { styled } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { CheckCircle, Delete, Cancel  } from '@material-ui/icons';
 
 const style = {
   position: 'absolute',
@@ -38,7 +39,21 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const columns = [
-    { id: "status", label: "Status", minWidth: 170 },
+    { id: "status", label: "Status", minWidth: 170, 
+    renderCell: (status: string) => (
+      <strong>
+        {status === 'true'? 
+        <Button variant="outlined" color="error" startIcon={<Cancel/>} aria-label="delete" onClick={(e)=> {return null;}}>
+            Pendente
+        </Button>
+        :
+        <Button variant="outlined" color="success" startIcon={<CheckCircle/>} aria-label="delete" onClick={(e)=> {return null;}}>
+            Resolvido
+        </Button>
+        }
+      </strong>
+    )
+  },
     { id: "id", label: "Id", minWidth: 170 },
     { id: "epi", label: "EPI", minWidth: 170 },
     { id: "description", label: "Descrição", minWidth: 100 },
@@ -160,7 +175,7 @@ const columns = [
                       }}
                     >
                       {columns.map((column) => {
-                        const value = row[column.id];
+                        const value = column.renderCell ? column.renderCell(row[column.id]) : row[column.id]? row[column.id] : "";
                         return (
                           <TableCell key={column.id}
                                     //align={column.align}
