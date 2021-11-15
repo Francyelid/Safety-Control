@@ -572,7 +572,7 @@ const getCsvDataFilterInactive = () => {
                           </Button>
                         </CSVLink>
                       </Item>           
-                      <Item >
+                      {/*<Item >
                         <CSVLink filename="DetecçõesFiltradasActive.csv" data={getCsvDataFilterActive()}>
                           <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
                             <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
@@ -585,7 +585,7 @@ const getCsvDataFilterInactive = () => {
                             <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
                           </Button>
                         </CSVLink>
-                      </Item>             
+                      </Item>*/  }           
                     </Box>
                   </Grid>
                 </Item>
