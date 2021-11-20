@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
@@ -39,38 +40,40 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+type Order = 'asc' | 'desc';
+
 const columns = [
-    { id: "status", label: "Status", minWidth: 170, 
-    renderCell: (status: string) => (
-      <strong>
-        {status === 'true'? 
-        <Button variant="outlined" color="error" startIcon={<Cancel/>} aria-label="delete" onClick={(e)=> {return null;}}>
-            Pendente
-        </Button>
-        :
-        <Button variant="outlined" color="success" startIcon={<CheckCircle/>} aria-label="delete" onClick={(e)=> {return null;}}>
-            Resolvido
-        </Button>
-        }
-      </strong>
-    )
-  },
-    { id: "id", label: "Id", minWidth: 170 },
-    { id: "epi", label: "EPI", minWidth: 170 },
-    { id: "description", label: "Descrição", minWidth: 100 },
+    { id: "status", label: "Status", minWidth: 170, type: "boolean", 
+      renderCell: (status: string) => (
+        <strong>
+          {status === 'true'? 
+          <Button variant="outlined" color="error" startIcon={<Cancel/>} aria-label="delete" onClick={(e)=> {return null;}}>
+              Pendente
+          </Button>
+          :
+          <Button variant="outlined" color="success" startIcon={<CheckCircle/>} aria-label="delete" onClick={(e)=> {return null;}}>
+              Resolvido
+          </Button>
+          }
+        </strong>
+      )
+    },
+    { id: "id", label: "Id", minWidth: 170, type: "number" },
+    { id: "epi", label: "EPI", minWidth: 170, type: "string" },
+    { id: "description", label: "Descrição", minWidth: 100, type: "string" },
     {
       id: "start_date",
       label: "Data de Início",
       minWidth: 170,
       align: "right",
-      format: (value) => value.toString()
+      format: (value) => value.toString(), type: "date"
     },
     {
       id: "end_date",
       label: "Data Final",
       minWidth: 170,
       align: "right",
-      format: (value) => value.toString()
+      format: (value) => value.toString(), type: "date"
     }
   ];
   
@@ -85,6 +88,8 @@ const columns = [
     const [idSelected, setIdSelected] = React.useState(null);
     const [imageStartSelected, setImageStartSelected] = React.useState('');
     const [imageEndSelected, setImageEndSelected] = React.useState('');
+    const [sortField, setSortField] = React.useState('');
+    const [sortDirection, setSortDirection] = React.useState<Order>('asc');
     
     const [open, setOpen] = React.useState(false);
 
@@ -124,7 +129,6 @@ const columns = [
         }).then((resultEpi) => {
           resultEpi.json().then((resEpi) => {
             resultControl.json().then((resControl) => {
-              
               let rows = resControl.map(function(row) { 
                 function findEpi(inv) {
                   return inv["id"] === row["epi_id"];
@@ -154,6 +158,68 @@ const columns = [
       setRowsPerPage(+event.target.value);
       setPage(0);
     };
+
+    const sortData = (sortBy, sortOrder, rows) => {
+      var itemsToSort = JSON.parse(JSON.stringify((rows || controlArray)));
+      var sortedItems = [];
+      var column = columns.find(function(x){ return x.id == sortBy });
+      var compareFn = null;
+
+      switch(column.type)
+      {
+        case "string":
+        case "boolean":
+        case "number":
+          compareFn = (i, j) => {
+            if (i[sortBy] < j[sortBy]) {
+              return sortOrder === "asc" ? -1 : 1;
+            } else {
+              if (i[sortBy] > j[sortBy]) {
+                return sortOrder === "asc" ? 1 : -1;
+              } else {
+                return 0;
+              }
+            }
+          };
+          break;
+        case "date":
+          compareFn = (i, j) => {
+            if (new Date(i[sortBy]) < new Date(j[sortBy])) {
+              return sortOrder === "asc" ? -1 : 1;
+            } else {
+              if (new Date(i[sortBy]) > new Date(j[sortBy])) {
+                return sortOrder === "asc" ? 1 : -1;
+              } else {
+                return 0;
+              }
+            }
+          };
+          break;
+        default:
+          break;
+      }
+      
+      sortedItems = compareFn != null ?  itemsToSort.sort(compareFn) : itemsToSort;
+      
+      return sortedItems;
+    };
+
+    const requestSort = (pSortBy) => {
+      var sortBy = sortField;
+      var sortOrder = sortDirection;
+      return event => {
+        if (pSortBy === sortField) {
+          sortOrder = sortOrder === "asc" ? "desc" : "asc";
+        } else {
+          sortBy = pSortBy;
+          sortOrder = "asc";
+        }
+        var sortedItems = sortData(sortBy, sortOrder, controlArray);
+        setSortField(sortBy);
+        setSortDirection(sortOrder);
+        setControlArray(sortedItems);
+      };
+    };
   
     return (
       <Paper sx={{ width: "100%", overflow: "hidden", position: 'relative',}}>
@@ -167,7 +233,13 @@ const columns = [
                     //align={column.align}
                     style={{ minWidth: column.minWidth }}
                   >
-                    {column.label}
+                    <TableSortLabel 
+                    active={column.id == sortField}
+                    direction={sortDirection}
+                    onClick={requestSort(column.id)}
+                    >
+                      {column.label}
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>
