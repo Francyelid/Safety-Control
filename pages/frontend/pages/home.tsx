@@ -96,12 +96,13 @@ function Item(props: BoxProps) {
                 let diff = endDate.getTime() - startDate.getTime();   
                 
                 let statusControl =  diff < 0 ? 'true' : 'false'
-                temp_now = statusControl == 'true' ? temp_now+1: temp_now;
-                temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
+                
                 
                   var dt = new Date();
                   dt.setDate(dt.getDay() - 1);
                   if(new Date(row["start_date"]) > dt){
+                    temp_now = statusControl == 'true' ? temp_now+1: temp_now;
+                    temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
                     return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
                   }
                  

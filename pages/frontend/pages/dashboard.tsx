@@ -129,10 +129,6 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
   const periodTypeArray = ['Ano', 'Mês', 'Dia', 'Hora']
   const periodTypeObject = { 'Ano':1, 'Mês':2, 'Dia':3, 'Hora':4}
 
-  const teste = function (){
-    alert("!");
-  }
-
   const Dashboard = () => {
 
     const  [session] = useSession();
@@ -145,6 +141,8 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     const [selectedItemEpi, setSelectedItemEpi] = useState(null);
     const [selectedItemPeriodo, setSelectedItemPeriodo] = useState(null);
     const [selectedItemQuantidade, setSelectedItemQuantidade] = useState(null);
+    const [now, setNow] = useState(0);
+    const [ocurred, setOcurred] = useState(0);
 
     const getCsvData = () => {
       const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
@@ -316,6 +314,10 @@ const getCsvDataFilterInactive = () => {
                   dtf.setHours(dtf.getHours() - 1);
                 }
               }
+              setNow(0);
+              setOcurred(0);
+              let temp_now = 0;
+              let temp_ocurred = 0;
               let resultRows = [];
               resControl.map(function(row) { 
                 
@@ -329,16 +331,21 @@ const getCsvDataFilterInactive = () => {
                 let diff = endDate.getTime() - startDate.getTime();   
                 
                 let statusControl =  diff < 0 ? 'true' : 'false'
+                
                // console.log(row["start_date"])
                
                if(selectedItemEpi == null || (epiFinded && epiFinded.name == selectedItemEpi)){
                  if(selectedItemQuantidade != null){ 
                    if((new Date(row["start_date"])) > dtf){ 
+                    temp_now = statusControl == 'true' ? temp_now+1: temp_now;
+                    temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
                     resultRows.push( 
                       new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
                     )
                    }
                  }else{
+                  temp_now = statusControl == 'true' ? temp_now+1: temp_now;
+                  temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
                   resultRows.push( 
                     new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
                   )
@@ -350,6 +357,9 @@ const getCsvDataFilterInactive = () => {
                
                // return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
               });
+
+              setNow(temp_now);
+              setOcurred(temp_ocurred);
              
               let ResultObject = resultRows.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null))/*.map(function(item) {
                 console.log(item)
@@ -477,95 +487,101 @@ const getCsvDataFilterInactive = () => {
     return (
       <DashboardLayout>
         <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%"}}>
-            <Box sx={{display:'grid',  minWidth:"100%"}}>
+            <Box sx={{display:'grid', minHeight:"100%", minWidth:"100%"}}>
               <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', minHeight:"100%", minWidth:"100%"}}>
-                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
-                  <div>
-                  <Chart 
-                    height="35vh"
-                    chartType="ScatterChart"
-                    loader={<div>Loading Chart</div>}
-                    data={dataArray}
-                    options={{
-                      colors: ['#8e0152', '#276419'],
-                      pointSize: 10,
-                      animation: {
-                        duration: 1000,
-                        easing: 'out',
-                        startup: true,
-                      },
-                      title: 'Data vs. Quantidade Detecções',
-                      vAxis: {
-                        title: 'Quantidate',                         
-                        viewWindow: {
-                          max: 100,
-                          min: 0,
+             
+                    <Chart 
+                      height="35vh"
+                      chartType="ScatterChart"
+                      loader={<div>Loading Chart</div>}
+                      data={dataArray}
+                      options={{
+                        colors: ['#8e0152', '#276419'],
+                        pointSize: 10,
+                        animation: {
+                          duration: 1000,
+                          easing: 'out',
+                          startup: true,
                         },
-                      },
-                      hAxis: {
-                        title: 'Data',
-                      },
-                      legend: { position: 'none' },
-                      enableInteractivity: true,
-                    }}
-                    rootProps={{ 'data-testid': '2' }}
-                  />
-                  </div>
-                </Item>
-                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
-                  <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
-                    <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
-                      <Item>
-                        <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"} selectedItem={selectedItemEpi} setSelectedItem = {(comboItem) => {setSelectedItemEpi(comboItem);}}/>
-                      </Item>
-                      <Item>
-                        <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"} selectedItem={selectedItemPeriodo} setSelectedItem = {(comboItemP) => {setSelectedItemPeriodo(comboItemP);}}/>
-                      </Item>
-                      <Item>
-                        <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"} selectedItem={selectedItemQuantidade} setSelectedItem = {(comboItemQ) => {setSelectedItemQuantidade(comboItemQ);}}/>
-                      </Item>
-                      <Item >
-                          <Button style={{height:"100%"}} fullWidth onClick={() => DataReturned()} color="primary" size="large" variant = "contained" type="button" >
-                            <UpdateOutlined sx={{ fontSize: 40 }} name="update"  />
-                          </Button>
-                      </Item>
-                    </Box>
-                  </Grid>
-                </Item>
-                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
-                  <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{ height:"100%", width:"100%"}}>
-                    <Box sx={{display:'grid', minHeight:"100%", minWidth:"100%", gridTemplateColumns: 'repeat(2, 1fr)', marginTop:"5vh",  marginLeft:"2vw"}}>
-                      <Item >
-                        <CSVLink filename="DetecçõesCompletas.csv" data={getCsvData()}>
-                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
-                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
-                          </Button>
-                        </CSVLink>
-                      </Item>
-                      <Item >
-                        <CSVLink filename="DetecçõesFiltradas.csv" data={getCsvDataFilter()}>
-                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
-                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
-                          </Button>
-                        </CSVLink>
-                      </Item>           
-                      <Item >
-                        <CSVLink filename="DetecçõesFiltradasActive.csv" data={getCsvDataFilterActive()}>
-                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
-                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
-                          </Button>
-                        </CSVLink>
-                      </Item>  
-                      <Item >
-                        <CSVLink filename="DetecçõesFiltradasInactive.csv" data={getCsvDataFilterInactive()}>
-                          <Button style={{height:"100%"}} fullWidth onClick={() => teste()} color="primary" size="large" variant = "contained" type="button" >
-                            <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
-                          </Button>
-                        </CSVLink>
-                      </Item>          
-                    </Box>
-                  </Grid>
-                </Item>
+                        title: 'Data vs. Quantidade Detecções',
+                        vAxis: {
+                          title: 'Quantidade',                         
+                          viewWindow: {
+                            max: 100,
+                            min: 0,
+                          },
+                        },
+                        hAxis: {
+                          title: 'Data',
+                        },
+                        legend: { position: 'none' },
+                        enableInteractivity: true,
+                      }}
+                      rootProps={{ 'data-testid': '2' }}
+                    />
+                  <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                    <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
+                      <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
+                        <Item>
+                          <Combobox title={"Tipo de EPI"} options={episArray} unselect={"Selecione o tipo do epi"} selectedItem={selectedItemEpi} setSelectedItem = {(comboItem) => {setSelectedItemEpi(comboItem);}}/>
+                        </Item>
+                        <Item>
+                          <Combobox title={"Tipo Periodo Analisado"} options={periodTypeArray} unselect={"Selecione o tipo do periodo"} selectedItem={selectedItemPeriodo} setSelectedItem = {(comboItemP) => {setSelectedItemPeriodo(comboItemP);}}/>
+                        </Item>
+                        <Item>
+                          <Combobox title={"Quantidade Analisada"} options={quantityArray} unselect={"Selecione a quantidade"} selectedItem={selectedItemQuantidade} setSelectedItem = {(comboItemQ) => {setSelectedItemQuantidade(comboItemQ);}}/>
+                        </Item>
+                        <Item >
+                            <Button style={{height:"100%"}} fullWidth onClick={() => DataReturned()} color="primary" size="large" variant = "contained" type="button" >
+                              <UpdateOutlined sx={{ fontSize: 40 }} name="update"  />
+                            </Button>
+                        </Item>
+                      </Box>
+                    </Grid>
+                  </Item>
+                  <Item>
+                      <TextField style={{marginRight:20}} label={"Detecções Ativas"} value={now} inputProps={{ readOnly: true  }}></TextField>
+              
+                      <TextField   label={"Detecções Recentes Registradas"} value={ocurred} inputProps={{ readOnly: true  }}></TextField>
+                  </Item>
+                  <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                    <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{ height:"100%", width:"100%"}}>
+                      <Box sx={{display:'grid', minHeight:"100%", minWidth:"100%", gridTemplateColumns: 'repeat(2, 1fr)', marginTop:"5vh",  marginLeft:"2vw"}}>
+                        <Item >
+                          <CSVLink filename="DetecçõesCompletas.csv" data={getCsvData()}>
+                            <Button style={{height:"100%"}} fullWidth onClick={() =>  {alert("Relatório de Todas Detecções")}} color="primary" size="large" variant = "contained" type="button" >
+                              <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                              Relatório de Todas Detecções
+                            </Button>
+                          </CSVLink>
+                        </Item>
+                        <Item >
+                          <CSVLink filename="DetecçõesFiltradas.csv" data={getCsvDataFilter()}>
+                            <Button style={{height:"100%"}} fullWidth onClick={() =>  {alert("Relatório de Detecções Filtradas")}} color="primary" size="large" variant = "contained" type="button" >
+                              <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                              Relatório de Detecções Filtradas
+                            </Button>
+                          </CSVLink>
+                        </Item>           
+                        <Item >
+                          <CSVLink filename="DetecçõesFiltradasActive.csv" data={getCsvDataFilterActive()}>
+                            <Button style={{height:"100%"}} fullWidth onClick={() =>  {alert("Relatório de Detecções Ativas")}} color="primary" size="large" variant = "contained" type="button" >
+                              <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                              Relatório de Detecções Ativas
+                            </Button>
+                          </CSVLink>
+                        </Item>  
+                        <Item >
+                          <CSVLink filename="DetecçõesFiltradasInactive.csv" data={getCsvDataFilterInactive()}>
+                            <Button style={{height:"100%"}} fullWidth onClick={() =>  {alert("Relatório de Detecções Inativas")}} color="primary" size="large" variant = "contained" type="button" >
+                              <DescriptionOutlined sx={{ fontSize: 40 }} name="instagram"  />
+                              Relatório de Detecções Inativas
+                            </Button>
+                          </CSVLink>
+                        </Item>          
+                      </Box>
+                    </Grid>
+                  </Item>
               </Box>
             </Box>
         </Grid>
