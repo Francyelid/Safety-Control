@@ -297,7 +297,28 @@ const getCsvDataFilterInactive = () => {
               resultData.push(["Data","Quantidate"]);
               console.log("selecionado" + selectedItemEpi)
               console.log("periodo" + selectedItemPeriodo + " quantidade" + selectedItemQuantidade)
-              let resultRows = resControl.map(function(row) { 
+              let dtf = new Date();
+              if(selectedItemQuantidade != null){                
+                switch (selectedItemPeriodo) {
+                 case 'Ano':
+                  dtf.setFullYear(dtf.getFullYear() - Number(selectedItemQuantidade));
+                   break;
+                 case 'Mês':
+                  dtf.setMonth(dtf.getMonth() - Number(selectedItemQuantidade));
+                   break;
+                 case 'Dia':
+                  dtf.setDate(dtf.getDay() - Number(selectedItemQuantidade));
+                   break;
+                 case 'Hora':
+                  dtf.setHours(dtf.getHours() - Number(selectedItemQuantidade));
+                   break;
+                 default:
+                  dtf.setHours(dtf.getHours() - 1);
+                }
+              }
+              let resultRows = [];
+              resControl.map(function(row) { 
+                
                 function findEpi(inv) {
                   return inv["id"] === row["epi_id"];
                 }
@@ -311,29 +332,16 @@ const getCsvDataFilterInactive = () => {
                // console.log(row["start_date"])
                
                if(selectedItemEpi == null || (epiFinded && epiFinded.name == selectedItemEpi)){
-                 if(selectedItemQuantidade != null){
-                  var dt = new Date();
-                  switch (selectedItemPeriodo) {
-                   case 'Ano':
-                     dt.setFullYear(dt.getFullYear() - Number(selectedItemQuantidade));
-                     break;
-                   case 'Mês':
-                     dt.setMonth(dt.getMonth() - Number(selectedItemQuantidade));
-                     break;
-                   case 'Dia':
-                     dt.setDate(dt.getDay() - Number(selectedItemQuantidade));
-                     break;
-                   case 'Hora':
-                     dt.setHours(dt.getHours() - Number(selectedItemQuantidade));
-                     break;
-                   default:
-                    dt.setHours(dt.getHours() - 1);
-                  }
-                  if(new Date(row["start_date"]) > dt){
-                    return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
-                  }
+                 if(selectedItemQuantidade != null){ 
+                   if((new Date(row["start_date"])) > dtf){ 
+                    resultRows.push( 
+                      new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
+                    )
+                   }
                  }else{
-                  return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
+                  resultRows.push( 
+                    new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
+                  )
                  }
                  
                  
@@ -356,6 +364,7 @@ const getCsvDataFilterInactive = () => {
               //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
               //return
               //console.log(resultRows)
+              debugger
               setDataArray(resultData)
 
 
@@ -402,11 +411,14 @@ const getCsvDataFilterInactive = () => {
                   "column_six": row["end_date"]
                 }
               })
+              debugger
               setExcelData(rows);
               setExcelDataFilterActive(rowsFilterA);
               setExcelDataFilterInactive(rowsFilterI);
 
-              let rowsFilter = resControl.map(function(row) { 
+              let rowsFilter = [];
+              resControl.map(function(row) { 
+                
                 function findEpi(inv) {
                   return inv["id"] === row["epi_id"];
                 }
@@ -420,42 +432,25 @@ const getCsvDataFilterInactive = () => {
 
                 if(selectedItemEpi == null || (epiFinded && epiFinded.name == selectedItemEpi)){
                   if(selectedItemQuantidade != null){
-                   var dt = new Date();
-                   switch (selectedItemPeriodo) {
-                    case 'Ano':
-                      dt.setFullYear(dt.getFullYear() - Number(selectedItemQuantidade));
-                      break;
-                    case 'Mês':
-                      dt.setMonth(dt.getMonth() - Number(selectedItemQuantidade));
-                      break;
-                    case 'Dia':
-                      dt.setDate(dt.getDay() - Number(selectedItemQuantidade));
-                      break;
-                    case 'Hora':
-                      dt.setHours(dt.getHours() - Number(selectedItemQuantidade));
-                      break;
-                    default:
-                     dt.setHours(dt.getHours() - 1);
-                   }
-                   if(new Date(row["start_date"]) > dt){
-                    return {
+                   if((new Date(row["start_date"])) > dtf){
+                    rowsFilter.push( {
                       "column_one": statusControl,
                       "column_two": row["id"],
                       "column_three": epiFinded.name,
                       "column_four": row["description"],
                       "column_five": row["start_date"],
                       "column_six": row["end_date"]
-                    }
+                    })
                    }
                   }else{
-                    return {
+                    rowsFilter.push( {
                       "column_one": statusControl,
                       "column_two": row["id"],
                       "column_three": epiFinded.name,
                       "column_four": row["description"],
                       "column_five": row["start_date"],
                       "column_six": row["end_date"]
-                    }
+                    })
                   }
                   
                   
@@ -463,6 +458,7 @@ const getCsvDataFilterInactive = () => {
                 }
                
               })
+              debugger
               setExcelDataFilter(rowsFilter);
 
 
