@@ -192,39 +192,41 @@ const columns = [
       var sortedItems = [];
       var column = columns.find(function(x){ return x.id == sortBy });
       var compareFn = null;
-
-      switch(column.type)
-      {
-        case "string":
-        case "boolean":
-        case "number":
-          compareFn = (i, j) => {
-            if (i[sortBy] < j[sortBy]) {
-              return sortOrder === "asc" ? -1 : 1;
-            } else {
-              if (i[sortBy] > j[sortBy]) {
-                return sortOrder === "asc" ? 1 : -1;
+      
+      if(sortBy && column){
+        switch(column.type)
+        {
+          case "string":
+          case "boolean":
+          case "number":
+            compareFn = (i, j) => {
+              if (i[sortBy] < j[sortBy]) {
+                return sortOrder === "asc" ? -1 : 1;
               } else {
-                return 0;
+                if (i[sortBy] > j[sortBy]) {
+                  return sortOrder === "asc" ? 1 : -1;
+                } else {
+                  return 0;
+                }
               }
-            }
-          };
-          break;
-        case "date":
-          compareFn = (i, j) => {
-            if (new Date(i[sortBy]) < new Date(j[sortBy])) {
-              return sortOrder === "asc" ? -1 : 1;
-            } else {
-              if (new Date(i[sortBy]) > new Date(j[sortBy])) {
-                return sortOrder === "asc" ? 1 : -1;
+            };
+            break;
+          case "date":
+            compareFn = (i, j) => {
+              if (new Date(i[sortBy]) < new Date(j[sortBy])) {
+                return sortOrder === "asc" ? -1 : 1;
               } else {
-                return 0;
+                if (new Date(i[sortBy]) > new Date(j[sortBy])) {
+                  return sortOrder === "asc" ? 1 : -1;
+                } else {
+                  return 0;
+                }
               }
-            }
-          };
-          break;
-        default:
-          break;
+            };
+            break;
+          default:
+            break;
+        }
       }
       
       sortedItems = compareFn != null ?  itemsToSort.sort(compareFn) : itemsToSort;
