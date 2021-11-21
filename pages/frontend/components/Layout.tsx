@@ -186,7 +186,7 @@ const Layout = ({ children }) => {
       role="presentation"
       onKeyDown={toggleDrawer(false)}
     >
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#7e5196' }}
       component="nav"
       aria-labelledby="nested-list-subheader">
           <ListItem key={"home"}>
@@ -234,7 +234,7 @@ const Layout = ({ children }) => {
           </ListItem>
       </List>
       <Divider />
-      <List className="absolute bottom-0 w-full my-8">
+      <List className="absolute bottom-0 w-full my-8" >
           <ListItem key="Logout">
             <ListItemButton selected={selectedIndex === 5}  onClick={(e)=>{Logout();handleListItemClick(e, 5)}}> 
               <ListItemIcon>
@@ -248,15 +248,15 @@ const Layout = ({ children }) => {
   );
 
   if (loading) 
-    return (<Box style={{height:"100vh", background:"#6E4582"}}></Box>);
+    return (<Box style={{height:"100vh", background:"#FFFFFF"}}></Box>);
 
   if(session){
   return (
-    <Box style={{height:"100vh", background:"#6E4582"}}>
+    <Box style={{height:"100vh", background:"#FFFFFF"}}>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
       <BodyWrapper>
-        <Toolbar variant="dense" style={{ height:"10vh", background:"#030303"}}>
+        <Toolbar variant="dense" style={{ height:"10vh", background:"#7e5196"}}>
           <IconButton
             size="large"
             edge="start"
@@ -276,7 +276,10 @@ const Layout = ({ children }) => {
           </Drawer>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} color="white">
-            Safety Control
+            <img
+                width = "200"
+                height = "90%"
+                src = "https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/logo_white.png"/>
           </Typography>
           <Button
             id="basic-button"
@@ -331,8 +334,8 @@ const Layout = ({ children }) => {
         </Modal>
         </div>
         </Toolbar>
-        <Box className="flex" style={{height:"90vh", background:"#6E4582"}}>
-          <Box style={{height:"90vh",width:"95%", paddingTop:"10vh", paddingLeft:"3%"}}>
+        <Box className="flex" style={{height:"95%", width:"100%", background:"#FFFFFF"}}>
+          <Box style={{height:"95%",width:"95%", paddingTop:"10vh", paddingLeft:"3%"}}>
             <div
               className="content-box"
               style={{ flexGrow: 2, flexBasis: "0%" }}
