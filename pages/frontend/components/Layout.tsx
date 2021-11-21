@@ -4,12 +4,11 @@ import NavSidebar from "./NavSidebar";
 import BodyWrapper from "./BodyWrapper";
 import { Button, Modal, TextField, InputAdornment, BoxProps, Menu, MenuItem ,ListItemButton, Toolbar, IconButton, Typography, Avatar, Box, Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Collapse, Backdrop, CircularProgress, Alert} from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import  {Mail, Inbox, ExpandLess, ExpandMore, Home, Dashboard, EventAvailable, Storage, Person, ExitToApp, Lock} from "@material-ui/icons";
+import  {Announcement, Mail, Inbox, ExpandLess, ExpandMore, Home, Dashboard, EventAvailable, Storage, Person, ExitToApp, Lock} from "@material-ui/icons";
 import useSWR from 'swr';
 import cookie from 'js-cookie';
 import Router from 'next/router';
 import User from '../../api/models/UserModel';
-import AboutPage from "../pages/about";
 
 function Item(props: BoxProps) {
   const { sx, ...other } = props;
@@ -217,7 +216,7 @@ const Layout = ({ children }) => {
           <ListItem key={"Sobre"}>
             <ListItemButton selected={selectedIndex === 2} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/about");handleListItemClick(e, 2); }}>
               <ListItemIcon>
-                <AboutPage />
+                <Announcement />
               </ListItemIcon>
               <ListItemText primary={"Sobre"} />
             </ListItemButton>
