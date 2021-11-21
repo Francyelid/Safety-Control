@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import cookie from 'js-cookie';
 import Router from 'next/router';
 import User from '../../api/models/UserModel';
+import AboutPage from "../pages/about";
 
 function Item(props: BoxProps) {
   const { sx, ...other } = props;
@@ -211,6 +212,14 @@ const Layout = ({ children }) => {
                 <EventAvailable />
               </ListItemIcon>
               <ListItemText primary={"Ocorrências"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={"Sobre"}>
+            <ListItemButton selected={selectedIndex === 2} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/about");handleListItemClick(e, 2); }}>
+              <ListItemIcon>
+                <AboutPage />
+              </ListItemIcon>
+              <ListItemText primary={"Sobre"} />
             </ListItemButton>
           </ListItem>
           <ListItem key={"Cadastros"}>

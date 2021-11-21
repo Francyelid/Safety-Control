@@ -62,7 +62,8 @@ function Item(props: BoxProps) {
                   Sobre
                 </Item>
                 <Item style={{minHeight:"100%",  minWidth:"100%"}}>
-                  Projeto desenvolvido para a absorção dos conceitos vistos relacionados durante a graduação como avaliação da disciplina de Projeto Integrado em Engenharia de Computação I do oitavo semestre do curso de Engenharia de Computação.
+                  Projeto desenvolvido para a absorção dos conceitos vistos relacionados durante a graduação como avaliação da disciplina de 
+                  Projeto Integrado em Engenharia de Computação I do oitavo semestre do curso de Engenharia de Computação.
                 </Item>
             </Box>
         </Grid>
