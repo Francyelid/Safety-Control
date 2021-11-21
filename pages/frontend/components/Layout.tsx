@@ -213,23 +213,25 @@ const Layout = ({ children }) => {
               <ListItemText primary={"Ocorrências"} />
             </ListItemButton>
           </ListItem>
-          <ListItemButton onClick={e=>handleClick(e)}>
-            <ListItemIcon>
-              <Storage />
-            </ListItemIcon>
-            <ListItemText primary="Cadastros" />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton selected={selectedIndex === 3} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/user/userIndex");handleListItemClick(e, 3); }}>
-                <ListItemIcon>
-                  <Person />
-                </ListItemIcon>
-                <ListItemText primary="Usuário" />
-              </ListItemButton>
-            </List>
-          </Collapse>
+          <ListItem key={"Cadastros"}>
+            <ListItemButton onClick={e=>handleClick(e)}>
+              <ListItemIcon>
+                <Storage />
+              </ListItemIcon>
+              <ListItemText primary="Cadastros" />
+              {open ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton selected={selectedIndex === 3} onClick={(e)=>{ toggleDrawer(false);ChangePage("/frontend/pages/user/userIndex");handleListItemClick(e, 3); }}>
+                  <ListItemIcon>
+                    <Person />
+                  </ListItemIcon>
+                  <ListItemText primary="Usuário" />
+                </ListItemButton>
+              </List>
+            </Collapse>
+          </ListItem>
       </List>
       <Divider />
       <List className="absolute bottom-0 w-full my-8">
