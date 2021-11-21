@@ -244,7 +244,7 @@ const getCsvDataFilterInactive = () => {
                 
                 let statusControl =  diff < 0 ? 'true' : 'false'
                 //console.log(row["start_date"])
-                return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
+                return [new Date(row["start_date"]).getDate(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
               })//.reduce((a, c) => (a[c] = (a[c] || 0) + 1, a), Object.create(null));
               //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
               //console.log(resultRows)
@@ -305,7 +305,7 @@ const getCsvDataFilterInactive = () => {
                   dtf.setMonth(dtf.getMonth() - Number(selectedItemQuantidade));
                    break;
                  case 'Dia':
-                  dtf.setDate(dtf.getDay() - Number(selectedItemQuantidade));
+                  dtf.setDate(dtf.getDate() - Number(selectedItemQuantidade));
                    break;
                  case 'Hora':
                   dtf.setHours(dtf.getHours() - Number(selectedItemQuantidade));
@@ -340,14 +340,14 @@ const getCsvDataFilterInactive = () => {
                     temp_now = statusControl == 'true' ? temp_now+1: temp_now;
                     temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
                     resultRows.push( 
-                      new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
+                      new Date(row["start_date"]).getDate().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
                     )
                    }
                  }else{
                   temp_now = statusControl == 'true' ? temp_now+1: temp_now;
                   temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
                   resultRows.push( 
-                    new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
+                    new Date(row["start_date"]).getDate().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
                   )
                  }
                  
@@ -355,7 +355,7 @@ const getCsvDataFilterInactive = () => {
                  
                }
                
-               // return [new Date(row["start_date"]).getDay(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
+               // return [new Date(row["start_date"]).getDate(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
               });
 
               setNow(temp_now);
@@ -367,6 +367,9 @@ const getCsvDataFilterInactive = () => {
               });*/
               for (const [day, qtd] of Object.entries(ResultObject)) {
                 resultData.push([day,qtd]);
+              }
+              if(resultData.length == 1){
+                resultData.push([new Date().getDate().toString()  +"/"+  new Date().getMonth().toString() +"/"+ new Date().getFullYear().toString(),0]);
               }
               //console.log(resultData)
               

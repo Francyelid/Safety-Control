@@ -85,7 +85,8 @@ function Item(props: BoxProps) {
               let temp_ocurred = 0;
               var resultData = [];
               resultData.push(["Data","Quantidate"]);
-              let resultRows = resControl.map(function(row) { 
+              let resultRows = [];
+              resControl.map(function(row) { 
                 function findEpi(inv) {
                   return inv["id"] === row["epi_id"];
                 }
@@ -99,11 +100,11 @@ function Item(props: BoxProps) {
                 
                 
                   var dt = new Date();
-                  dt.setDate(dt.getDay() - 1);
+                  dt.setDate(dt.getDate() - 1);
                   if(new Date(row["start_date"]) > dt){
                     temp_now = statusControl == 'true' ? temp_now+1: temp_now;
                     temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
-                    return new Date(row["start_date"]).getDay().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString();
+                    resultRows.push(new Date(row["start_date"]).getDate().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString());
                   }
                  
                  
@@ -116,6 +117,9 @@ function Item(props: BoxProps) {
 
               for (const [day, qtd] of Object.entries(ResultObject)) {
                 resultData.push([day,qtd]);
+              }
+              if(resultData.length == 1){
+                resultData.push([new Date().getDate().toString()  +"/"+  new Date().getMonth().toString() +"/"+ new Date().getFullYear().toString(),0]);
               }
               setDataArray(resultData)
 
