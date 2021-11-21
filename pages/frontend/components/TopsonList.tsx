@@ -20,6 +20,8 @@ import { styled } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { CheckCircle, Delete, Cancel  } from '@material-ui/icons';
 import { debug } from 'console';
+import {TextField, InputAdornment} from '@material-ui/core';
+import { Search } from '@material-ui/icons';
 
 const style = {
   position: 'absolute',
@@ -85,13 +87,38 @@ const columns = [
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(7);
     const [controlArray, setControlArray] = React.useState([]);
+    const [fullDataArray, setFullDataArray] = React.useState([]);
     const [idSelected, setIdSelected] = React.useState(null);
     const [imageStartSelected, setImageStartSelected] = React.useState('');
     const [imageEndSelected, setImageEndSelected] = React.useState('');
     const [sortField, setSortField] = React.useState('');
     const [sortDirection, setSortDirection] = React.useState<Order>('asc');
+    const [searched, setSearched] = React.useState('');
     
     const [open, setOpen] = React.useState(false);
+
+    const requestSearch = (searchedVal: string) => {
+      setSearched(searchedVal);
+      if(searchedVal){
+        const filteredRows = fullDataArray.filter((row) => {
+          return row.description.toLowerCase().includes(searchedVal.toLowerCase()) ||
+                 row.id.toString().toLowerCase().includes(searchedVal.toLowerCase()) || 
+                 row.epi.toLowerCase().includes(searchedVal.toLowerCase()) ||
+                 (row.start_date && row.start_date.toLowerCase().includes(searchedVal.toLowerCase())) ||
+                 (row.end_date && row.end_date.toLowerCase().includes(searchedVal.toLowerCase()));
+        });
+        var sortedItems = sortData(sortField, sortDirection, filteredRows);
+        setControlArray(sortedItems);
+      }else{
+        var sortedItems = sortData(sortField, sortDirection, fullDataArray);
+        setControlArray(sortedItems);
+      }
+    };
+  
+    const cancelSearch = () => {
+      setSearched("");
+      requestSearch(searched);
+    };
 
     const handleOpen = (item) => {
       
@@ -143,6 +170,7 @@ const columns = [
                 return createData(statusControl,row["id"],epiFinded.name,row["description"],row["start_date"],row["end_date"],row["start_image"],row["end_image"]);
               })
               setControlArray(rows);
+              setFullDataArray(rows);
             })
           })
         })
@@ -223,6 +251,21 @@ const columns = [
   
     return (
       <Paper sx={{ width: "100%", overflow: "hidden", position: 'relative',}}>
+        <TextField
+          fullWidth
+          id="input-with-icon-textfield"
+          label="Pesquisar"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+          variant="standard"
+          value={searched}
+          onChange={(searchVal) => requestSearch(searchVal.target.value)}
+        />
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -230,7 +273,6 @@ const columns = [
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
-                    //align={column.align}
                     style={{ minWidth: column.minWidth }}
                   >
                     <TableSortLabel 
