@@ -340,14 +340,14 @@ const getCsvDataFilterInactive = () => {
                     temp_now = statusControl == 'true' ? temp_now+1: temp_now;
                     temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
                     resultRows.push( 
-                      new Date(row["start_date"]).getDate().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
+                      new Date(row["start_date"]).getDate().toString()  +"/"+  (new Date(row["start_date"]).getMonth()+1).toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
                     )
                    }
                  }else{
                   temp_now = statusControl == 'true' ? temp_now+1: temp_now;
                   temp_ocurred = statusControl == 'false' ? temp_ocurred+1: temp_ocurred;
                   resultRows.push( 
-                    new Date(row["start_date"]).getDate().toString()  +"/"+  new Date(row["start_date"]).getMonth().toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
+                    new Date(row["start_date"]).getDate().toString()  +"/"+  (new Date(row["start_date"]).getMonth()+1).toString() +"/"+ new Date(row["start_date"]).getFullYear().toString()
                   )
                  }
                  
@@ -369,7 +369,7 @@ const getCsvDataFilterInactive = () => {
                 resultData.push([day,qtd]);
               }
               if(resultData.length == 1){
-                resultData.push([new Date().getDate().toString()  +"/"+  new Date().getMonth().toString() +"/"+ new Date().getFullYear().toString(),0]);
+                resultData.push([new Date().getDate().toString()  +"/"+  (new Date().getMonth()+1).toString() +"/"+ new Date().getFullYear().toString(),0]);
               }
               //console.log(resultData)
               
