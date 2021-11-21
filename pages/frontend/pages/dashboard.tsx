@@ -365,6 +365,7 @@ const getCsvDataFilterInactive = () => {
                 console.log(item)
                 //resultData.push(["Data","Quantidate"])
               });*/
+              console.log(ResultObject)
               for (const [day, qtd] of Object.entries(ResultObject)) {
                 resultData.push([day,qtd]);
               }
