@@ -8,7 +8,7 @@ import ProjectsPage from "./projects";
 import DashboardPage from "./dashboard";
 import TeamsPage from "./teams";
 import HomePage from "./home";
-  
+import AboutPage from "./about";
  
 const Routes = () => {
   return (
@@ -42,6 +42,11 @@ const Routes = () => {
       <li>
         <Link href="/frontend/pages/settings">
           <SettingsPage />
+        </Link>
+      </li>
+      <li>
+        <Link href="/frontend/pages/about">
+          <AboutPage />
         </Link>
       </li>
     </ul>
