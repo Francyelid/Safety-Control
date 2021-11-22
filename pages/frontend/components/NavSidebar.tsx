@@ -102,6 +102,19 @@ const NavSidebar = () => {
                   // elemBefore: () => <Icon name="calendar" />
                 }
               ]*/
+            },
+            {
+              title: "Sobre",
+              itemId: "/frontend/pages/about",
+              elemBefore: () => <Icon name="search" />,
+              /*subNav: [
+                {
+                  title: "Teams",
+                  itemId: "/frontend/pages/teams"
+                  // Optional
+                  // elemBefore: () => <Icon name="calendar" />
+                }
+              ]*/
             }
           ]}
         />
