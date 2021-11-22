@@ -9,7 +9,7 @@ const App = ({ Component, pageProps:{session, ...pageProps} }: AppProps) => {
     palette:{
       mode:'dark',
       primary:{
-        main: '#6E4582'
+        main: '#FFFFFF'
       },
       secondary:{
         main: '#7E5095'

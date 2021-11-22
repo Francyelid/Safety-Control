@@ -133,10 +133,12 @@ function Item(props: BoxProps) {
 
     return (
       <DashboardLayout>
-        <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%"}}>
-            <Box sx={{display:'grid',  minWidth:"100%"}}>
-              <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', minHeight:"100%", minWidth:"100%"}}>
-                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+        <Grid container justifyContent="center" alignItems="flex-start" direction="column" spacing={5} style={{width:"100%",height:"100%", background:"#FFFFFF", 
+                                                backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/home_background.png)",
+                                                backgroundRepeat: 'no-repeat'}}>
+            <Box sx={{display:'grid',  height:"100%", width:"50%"}}>
+              <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', height:"100%", width:"100%"}}>
+                <Item style={{height:"100%",  width:"100%"}}>
                   <div>
                   <Chart 
                     height="35vh"
@@ -169,25 +171,9 @@ function Item(props: BoxProps) {
                   />
                   </div>
                 </Item>
-                <Item style={{minHeight:"100%",  minWidth:"100%"}}>
+                <Item style={{height:"100%",  width:"100%"}}>
                   <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
-                    <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>                     
-                      <Item >
-                          <Button style={{height:"100%"}} fullWidth onClick={() => DataReturned()} color="primary" size="large" variant = "contained" type="button" >
-                            <UpdateOutlined sx={{ fontSize: 40 }} name="update"  />
-                          </Button>
-                      </Item>
-                      <Item >
-                          <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="primary" size="large" variant = "contained" type="button" >
-                            <TextField label={"Detecções Ativas"} value={now} inputProps={{ readOnly: true  }}></TextField>
-                          </Button>
-                      </Item>
-                      <Item >
-                          <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="primary" size="large" variant = "contained" type="button" >
-                          <TextField   label={"Detecções Recentes Registradas"} value={ocurred} inputProps={{ readOnly: true  }}></TextField>
-                          </Button>
-                      </Item>
-                    </Box>
+                    
                   </Grid>
                 </Item>
                
