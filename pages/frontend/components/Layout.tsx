@@ -55,7 +55,7 @@ const Layout = ({ children }) => {
   const  [session, loading] = useSession();
   
   useEffect(()=>{
-    if((!session)){
+    if((session === null)){
       Router.push('/');
     }
   }, [session, loading]);
