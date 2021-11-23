@@ -6,7 +6,7 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import UserService from '../../../api/servicos/User/userService';
 import User from '../../../api/models/UserModel';
 import BaseRepository from '../../../api/repositorio/baseRepository';
-import {Modal, Box, Typography, Button, TextField, InputAdornment, BoxProps, IconButton, MenuItem } from "@material-ui/core";
+import {Grid,Modal, Box, Typography, Button, TextField, InputAdornment, BoxProps, IconButton, MenuItem } from "@material-ui/core";
 import { MailOutline, LockOutlined, Delete, AddBox  } from '@material-ui/icons';
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -266,78 +266,83 @@ const HomePage = () => {
   
   return (
     <DashboardLayout>
-        <Paper sx={{ width: "100%", overflow: "hidden" }}>
-          <TableContainer sx={{ maxHeight: "80vh" }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.filter(function(column){
-                    if(column["hide"] && column["hide"] === true){
-                      return false;
-                    }
-                    return true;
-                  }).map((column) => (
-                    <TableCell
-                      key={column.id}
-                      //align={column.align}
-                      style={{ minWidth: column.width }}
-                    >
-                      {column.headerName}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.id}
-                        onDoubleClick={(e)=> {handleOpen(row)}}
+        <Grid container justifyContent="center" alignItems="flex-start" direction="column" spacing={5} style={{width:"100%",height:"100%", background:"#FFFFFF", 
+          backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/list_background.png)",
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: "100%"
+          }}>
+          <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            <TableContainer sx={{ maxHeight: "80vh" }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.filter(function(column){
+                      if(column["hide"] && column["hide"] === true){
+                        return false;
+                      }
+                      return true;
+                    }).map((column) => (
+                      <TableCell
+                        key={column.id}
+                        //align={column.align}
+                        style={{ minWidth: column.width }}
                       >
-                        {columns.filter(function(column){
-                          if(column["hide"] && column["hide"] === true){
-                            return false;
-                          }
-                          return true;
-                        }).map((column) => {
-                          
-                          var value = row[column.id]? row[column.id] : column.renderCell ? column.renderCell(row.id) : "";
-                          if(column.id == "type")
-                            value = EUserType[value]? EUserType[value] : value;
+                        {column.headerName}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.id}
+                          onDoubleClick={(e)=> {handleOpen(row)}}
+                        >
+                          {columns.filter(function(column){
+                            if(column["hide"] && column["hide"] === true){
+                              return false;
+                            }
+                            return true;
+                          }).map((column) => {
+                            
+                            var value = row[column.id]? row[column.id] : column.renderCell ? column.renderCell(row.id) : "";
+                            if(column.id == "type")
+                              value = EUserType[value]? EUserType[value] : value;
 
-                          return (
-                            <TableCell key={column.id}
-                                      //align={column.align}
-                            >
-                              {value}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 50]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-          <Button variant="contained" style={{backgroundColor: "secondary"}} size="large" endIcon={<AddBox />} onClick={handleOpenCreate}>
-            Novo Usuário
-          </Button>
-        </Paper>
-
+                            return (
+                              <TableCell key={column.id}
+                                        //align={column.align}
+                              >
+                                {value}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 50]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+            <Button variant="contained" style={{backgroundColor: "secondary"}} size="large" endIcon={<AddBox />} onClick={handleOpenCreate}>
+              Novo Usuário
+            </Button>
+          </Paper>
+        </Grid>
         <div>
         <Modal
             open={openCreate}

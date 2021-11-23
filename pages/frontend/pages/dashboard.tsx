@@ -550,7 +550,10 @@ const getCsvDataFilterInactive = () => {
 
     return (
       <DashboardLayout>
-        <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%"}}>
+        <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%", background:"#FFFFFF",
+          backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/list_background.png)",
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: "100%"}}>
             <Box sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(1, 1fr)', minHeight:"100%", minWidth:"100%"}}>
               <Grid container spacing={5} style={{width:"100%", marginLeft:"2vw"}}>
               <Grid item xs={2}>
@@ -734,9 +737,7 @@ const getCsvDataFilterInactive = () => {
                     </Grid>
                   </Item>
                   <Item>
-                      <TextField style={{marginRight:20}} label={"Detecções Ativas"} value={now} inputProps={{ readOnly: true  }}></TextField>
-              
-                      <TextField   label={"Detecções Recentes Registradas"} value={ocurred} inputProps={{ readOnly: true  }}></TextField>
+                      
                   </Item>
                   <Item style={{minHeight:"100%",  minWidth:"100%"}}>
                     <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{ height:"100%", width:"100%"}}>
