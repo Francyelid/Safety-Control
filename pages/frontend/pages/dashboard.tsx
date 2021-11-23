@@ -11,8 +11,8 @@ import { CSVLink } from 'react-csv';
 import Combobox from '../components/Combobox';
 import { title } from 'process';
 
-import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
-import { Description, DescriptionOutlined, DescriptionRounded, DescriptionTwoTone, UpdateOutlined } from '@material-ui/icons'
+import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment, Card, CardMedia, CardActions, CardContent, CardHeader, Avatar, Modal, Backdrop, CircularProgress } from '@material-ui/core';
+import { Description, DescriptionOutlined, DescriptionRounded, DescriptionTwoTone, UpdateOutlined, VerifiedUser, EventAvailable,  GitHub } from '@material-ui/icons'
 /*
 const generateData = () => {
   
@@ -40,11 +40,30 @@ function Item(props: BoxProps) {
       sx={{
         height:"90%",
         bgcolor: 'primary.main',
-        color: 'white',
+        color: 'black',
         p: 1,
         borderRadius: 1,
         textAlign: 'center',
         fontSize: 19,
+        ...sx,
+      }}
+      {...other}
+    />
+  );
+}
+
+function Item2(props: BoxProps) {
+  const { sx, ...other } = props;
+  return (
+    <Box
+      sx={{
+        color: 'white',
+        p: 1,
+        m: 1,
+        borderRadius: 1,
+        textAlign: 'center',
+        fontSize: 19,
+        fontWeight: '700',
         ...sx,
       }}
       {...other}
@@ -125,6 +144,18 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
 }
 */
 
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
   const quantityArray = Array(30).fill(0).map((e, i)=> e = (i+1).toString())
   const periodTypeArray = ['Ano', 'Mês', 'Dia', 'Hora']
   const periodTypeObject = { 'Ano':1, 'Mês':2, 'Dia':3, 'Hora':4}
@@ -143,6 +174,7 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
     const [selectedItemQuantidade, setSelectedItemQuantidade] = useState(null);
     const [now, setNow] = useState(0);
     const [ocurred, setOcurred] = useState(0);
+    const [relationModal, setOpenRelationModal] = useState(false);
 
     const getCsvData = () => {
       const csvData = [[['status'],['id'],['epi'],['description'],['start_date'],['end_date']]];
@@ -161,6 +193,27 @@ class ComponentColuna extends React.Component<{}, { chartData: (string[])[] }> {
               
               return csvData;
       
+  };
+
+  const handleOpenRelationModal = () => {
+    setOpenRelationModal(true);
+  };
+
+  const [openLoading, setOpenLoading] = React.useState(false);
+  const handleLoadingClose = () => {
+    setOpenLoading(false);
+  };
+  const handleLoadingToggle = () => {
+    setOpenLoading(!openLoading);
+  };
+
+  function ChangePage(url){
+    handleLoadingToggle();
+    Router.push(url);
+  }
+
+  const handleCloseRelationModal = () => {
+    setOpenRelationModal(false);
   };
 
   const getCsvDataFilter = () => {
@@ -319,6 +372,7 @@ const getCsvDataFilterInactive = () => {
               let temp_now = 0;
               let temp_ocurred = 0;
               let resultRows = [];
+              let lastWeek = [];
               resControl.map(function(row) { 
                 
                 function findEpi(inv) {
@@ -330,7 +384,7 @@ const getCsvDataFilterInactive = () => {
                 let endDate = new Date(row["end_date"]);                       
                 let diff = endDate.getTime() - startDate.getTime();   
                 
-                let statusControl =  diff < 0 ? 'true' : 'false'
+                let statusControl =  diff < 0 ? 'true' : 'false';
                 
                // console.log(row["start_date"])
                
@@ -358,6 +412,14 @@ const getCsvDataFilterInactive = () => {
                // return [new Date(row["start_date"]).getDate(), new Date(row["start_date"]).getMonth(), new Date(row["start_date"]).getFullYear(), new Date(row["start_date"])]
               });
 
+              debugger;
+              resultRows.map((x) => {
+                if(x.start_date >= new Date().getDate() - 7)
+                {
+                  lastWeek.push(x);
+                }
+              });
+
               setNow(temp_now);
               setOcurred(temp_ocurred);
              
@@ -377,7 +439,7 @@ const getCsvDataFilterInactive = () => {
               //https://living-sun.com/pt/javascript/402373-how-to-generate-excel-through-javascript-closed-javascript-excel.html
               //return
               //console.log(resultRows)
-              debugger
+              
               setDataArray(resultData)
 
 
@@ -424,7 +486,7 @@ const getCsvDataFilterInactive = () => {
                   "column_six": row["end_date"]
                 }
               })
-              debugger
+              
               setExcelData(rows);
               setExcelDataFilterActive(rowsFilterA);
               setExcelDataFilterInactive(rowsFilterI);
@@ -471,7 +533,7 @@ const getCsvDataFilterInactive = () => {
                 }
                
               })
-              debugger
+              
               setExcelDataFilter(rowsFilter);
 
 
@@ -485,11 +547,140 @@ const getCsvDataFilterInactive = () => {
         })
       })
     }
-    
 
     return (
       <DashboardLayout>
         <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%"}}>
+            <Box sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(1, 1fr)', minHeight:"100%", minWidth:"100%"}}>
+              <Grid container spacing={5} style={{width:"100%", marginLeft:"2vw"}}>
+              <Grid item xs={2}>
+                  <Card>
+                    <CardHeader
+                      avatar= {
+                        <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
+                          <VerifiedUser/>
+                        </Avatar>
+                      }
+                      title="Ocorrências Pendentes"
+                      subheader="até o momento"
+                    />
+                    <CardContent>
+                      <Typography variant="body2" color="text.secondary">
+                        Atualmente existem {now} ocorrencias que precisam de atenção.
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={2}>
+                  <Card >
+                    <CardHeader
+                      avatar= {
+                        <Avatar sx={{ bgcolor: 'purple' }} aria-label="recipe">
+                          <VerifiedUser/>
+                        </Avatar>
+                      }
+                      title="Ocorrências Encerradas"
+                      subheader="até o momento"
+                    />
+                    <CardContent>
+                      <Typography variant="body2" color="text.secondary">
+                        Atualmente existem {ocurred} ocorrencias encerradas.
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={2}>
+                  <Card>
+                    <CardHeader
+                      avatar= {
+                        <Avatar sx={{ bgcolor: 'yellow' }} aria-label="recipe">
+                          <VerifiedUser/>
+                        </Avatar>
+                      }
+                      title="Relação de ocorrências"
+                      subheader="até o momento"
+                    />
+                    <CardContent style={{paddingBottom:"0"}}>
+                      <Typography variant="body2" color="text.secondary">
+                        Verifique a proporção entre ocorrencias ativas e encerradas.
+                      </Typography>
+                    </CardContent>
+                    <CardActions style={{paddingTop:"0"}}>
+                      <Button size="small" color="info" onClick={() => handleOpenRelationModal()}  >Verificar proporção</Button>
+                    </CardActions>
+                  </Card>
+                  <Modal
+                    open={relationModal}
+                    onClose={handleCloseRelationModal}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    >
+                      <Box sx={style}>
+                        <Item2><Typography variant="h4" align="center">Proporção entre ocorrências</Typography></Item2>
+                        <Item2><Typography align="center"></Typography>Baseado no total de ocorrencias, pode-se obter a seguinte propoção:</Item2>
+                        <Chart
+                          width="50"
+                          chartType="PieChart"
+                          loader={<div>Loading Chart</div>}
+                          data={[
+                            ['Status', 'Quantidade'],
+                            ['Resolvida', ocurred],
+                            ['Pendente', now],
+                          ]}
+                          options={{
+                            legend: 'none',
+                            pieSliceText: 'label',
+                            backgroundColor: 'transparent'
+                            // Just add this option
+                          }}
+                        />
+                      </Box>
+                  </Modal>
+                </Grid>
+                <Grid item xs={2}>
+                  <Card>
+                    <CardHeader
+                      avatar= {
+                        <Avatar sx={{ bgcolor: 'coral' }} aria-label="recipe">
+                          <EventAvailable/>
+                        </Avatar>
+                      }
+                      title="Detalhes das ocorrências"
+                      subheader="ir até"
+                    />
+                    <CardContent style={{paddingBottom:"0"}}>
+                      <Typography variant="body2" color="text.secondary">
+                        Ver mais detalhes na tela de ocorrências.
+                      </Typography>
+                    </CardContent>
+                    <CardActions style={{paddingTop:"0"}}>
+                      <Button size="small" color="info" onClick={() => ChangePage("./event")}  >Ir para Ocorrências</Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+                <Grid item xs={2}>
+                  <Card>
+                    <CardHeader
+                      avatar= {
+                        <Avatar sx={{ bgcolor: 'white' }} aria-label="recipe">
+                          <GitHub/>
+                        </Avatar>
+                      }
+                      title="Repositórios"
+                      subheader="ir para o GitHub"
+                    />
+                    <CardContent style={{paddingBottom:"0"}}>
+                      <Typography variant="body2" color="text.secondary">
+                        Vererifique as atualizações mais recentes deste projeto.
+                      </Typography>
+                    </CardContent>
+                    <CardActions style={{paddingTop:"0"}}>
+                      <Button size="small" color="info" onClick={() => ChangePage("https://github.com/Francyelid/Safety-Control")}  >Conhecer Repositório</Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Box>
             <Box sx={{display:'grid', minHeight:"100%", minWidth:"100%"}}>
               <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', minHeight:"100%", minWidth:"100%"}}>
              
@@ -588,6 +779,15 @@ const getCsvDataFilterInactive = () => {
               </Box>
             </Box>
         </Grid>
+        <div>
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={openLoading}
+            onClick={handleLoadingToggle}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        </div>
       </DashboardLayout>
     )
   }
