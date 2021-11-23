@@ -342,8 +342,8 @@ const Layout = ({ children }) => {
         </Modal>
         </div>
         </Toolbar>
-        <Box className="flex" style={{height:"95%", width:"100%", background:"#FFFFFF"}}>
-          <Box style={{height:"95%",width:"95%", paddingTop:"10vh", paddingLeft:"3%"}}>
+        <Box className="flex" style={{height:"100%", width:"100%", background:"#FFFFFF"}}>
+          <Box style={{height:"100%",width:"100%", paddingTop:"10vh", paddingLeft:"3%"}}>
             <div
               className="content-box"
               style={{ flexGrow: 2, flexBasis: "0%" }}
