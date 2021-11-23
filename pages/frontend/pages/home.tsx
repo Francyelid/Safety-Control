@@ -135,13 +135,15 @@ function Item(props: BoxProps) {
       <DashboardLayout>
         <Grid container justifyContent="center" alignItems="flex-start" direction="column" spacing={5} style={{width:"100%",height:"100%", background:"#FFFFFF", 
                                                 backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/home_background.png)",
-                                                backgroundRepeat: 'no-repeat'}}>
-            <Box sx={{display:'grid',  height:"100%", width:"50%"}}>
+                                                backgroundRepeat: 'no-repeat',
+                                                backgroundPosition: "100%",
+                                                marginLeft: "3%"}}>
+            <Box sx={{display:'grid'}}>
               <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', height:"100%", width:"100%"}}>
-                <Item style={{height:"100%",  width:"100%"}}>
-                  <div>
+                <Item style={{height:"100%",  minWidth:"80%"}}>
                   <Chart 
                     height="35vh"
+                    width="140vh"
                     chartType="ScatterChart"
                     loader={<div>Loading Chart</div>}
                     data={dataArray}
@@ -169,14 +171,26 @@ function Item(props: BoxProps) {
                     }}
                     rootProps={{ 'data-testid': '2' }}
                   />
-                  </div>
                 </Item>
-                <Item style={{height:"100%",  width:"100%"}}>
-                  <Grid container justifyContent="center" alignItems="center" direction="column" style={{ height:"100%", width:"100%"}}>
-                    
-                  </Grid>
+              </Box>
+            </Box>
+            <Box sx={{display:'grid', marginLeft: "5%"}}>
+              <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
+                <Item >
+                    <Button style={{height:"100%"}} fullWidth onClick={() => DataReturned()} color="secondary" size="large" variant = "contained" type="button" >
+                      <UpdateOutlined sx={{ fontSize: 40 }} name="update"  />
+                    </Button>
                 </Item>
-               
+                <Item >
+                    <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="secondary" size="large" variant = "contained" type="button" >
+                      <TextField label={"Detecções Ativas"} value={now} inputProps={{ readOnly: true }}></TextField>
+                    </Button>
+                </Item>
+                <Item >
+                    <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="secondary" size="large" variant = "contained" type="button" >
+                    <TextField   label={"Detecções Recentes"} value={ocurred} inputProps={{ readOnly: true  }}></TextField>
+                    </Button>
+                </Item>
               </Box>
             </Box>
         </Grid>
