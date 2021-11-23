@@ -83,27 +83,37 @@ const LoginPage = () => {
 
   return (
     <React.Fragment>
-      <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{minHeight:"100vh"}}>
-            <form onSubmit={handleSubmit}>
-              
-              <Box boxShadow={20} borderRadius={2} padding="10px" style={{background:"#333333", display:"grid", gap:5, boxShadow:"2px 2px 5px #7E5095"}}>
-                <Box  alignItems="center" sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)'}}>
-                  <Item><Typography variant="h4" align="center">Login</Typography></Item>
-                  <Item>
-                      <TextField variant="outlined" error={failValidation==='true'} label="email" fullWidth id="email" 
-                      InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}}/>
-                  </Item>
-                  <Item>
-                      <TextField variant="outlined" error={failValidation==='true'} label="password" type="password" fullWidth id="password" 
-                      InputProps={{startAdornment: (<InputAdornment position="start"><LockOutlined /></InputAdornment>),}} />
-                  </Item>
-                  <Item><Button color="secondary" size="large" variant = "contained" type="submit" >Entrar</Button></Item>
-              
-                  {loginError && 
-                  <Item><Typography paragraph align="center" color="error">{loginError}</Typography></Item>}
+      <Grid container justifyContent="center" alignItems="end" padding="20px" direction="column" spacing={5} style={{minHeight:"100vh", width:"100%", background:"#FFFFFF", 
+                                                                                                        backgroundImage: "url(https://github.com/Francyelid/Safety-Control/blob/main/pages/frontend/components/background/inital_background.png?raw=true)",
+                                                                                                        backgroundRepeat: 'no-repeat',
+                                                                                                        backgroundPositionX: "0%"}}>
+
+              <form onSubmit={handleSubmit}>
+
+              <img
+                width = "auto"
+                height = "20%"
+                src = "https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/logo_white.png"/>
+
+                
+                <Box boxShadow={20} borderRadius={2} padding="10px" style={{background:"#333333", display:"grid", gap:5, boxShadow:"2px 2px 5px #7E5095"}}>
+                  <Box  alignItems="center" sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)'}}>
+                    <Item><Typography variant="h4" align="center">Login</Typography></Item>
+                    <Item>
+                        <TextField variant="outlined" error={failValidation==='true'} label="email" fullWidth id="email" 
+                        InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}}/>
+                    </Item>
+                    <Item>
+                        <TextField variant="outlined" error={failValidation==='true'} label="password" type="password" fullWidth id="password" 
+                        InputProps={{startAdornment: (<InputAdornment position="start"><LockOutlined /></InputAdornment>),}} />
+                    </Item>
+                    <Item><Button color="secondary" size="large" variant = "contained" type="submit" >Entrar</Button></Item>
+                
+                    {loginError && 
+                    <Item><Typography paragraph align="center" color="error">{loginError}</Typography></Item>}
+                  </Box>
                 </Box>
-              </Box>
-            </form>
+              </form>
       </Grid>
       <div>
       
