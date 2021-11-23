@@ -39,7 +39,7 @@ function Item(props: BoxProps) {
     <Box
       sx={{
         height:"90%",
-        bgcolor: 'primary.main',
+        bgcolor: 'transparent',
         color: 'black',
         p: 1,
         borderRadius: 1,
@@ -551,7 +551,7 @@ const getCsvDataFilterInactive = () => {
     return (
       <DashboardLayout>
         <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%", background:"#FFFFFF",
-          backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/list_background.png)",
+          backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/dashboard_background.png)",
           backgroundRepeat: 'no-repeat',
           backgroundPosition: "100%"}}>
             <Box sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(1, 1fr)', minHeight:"100%", minWidth:"100%"}}>
