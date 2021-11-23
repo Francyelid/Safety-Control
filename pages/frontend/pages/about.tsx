@@ -22,7 +22,7 @@ function Item(props: BoxProps) {
       sx={{
         height:"90%",
         bgcolor: 'primary.main',
-        color: 'white',
+        color: 'black',
         p: 1,
         borderRadius: 1,
         textAlign: 'center',
