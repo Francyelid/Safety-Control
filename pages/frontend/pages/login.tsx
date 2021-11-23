@@ -92,7 +92,7 @@ const LoginPage = () => {
 
               <img
                 width = "auto"
-                height = "20%"
+                height = "30%"
                 src = "https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/logo_purple.png"/>
 
                 
@@ -100,12 +100,12 @@ const LoginPage = () => {
                   <Box  alignItems="center" sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)'}}>
                     <Item><Typography variant="h4" align="center">Login</Typography></Item>
                     <Item>
-                        <TextField variant="outlined" error={failValidation==='true'} label="email" fullWidth id="email" 
-                        InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline /></InputAdornment>),}}/>
+                        <TextField style= {{ color : "pink"}} className="inputRounded" variant="outlined" error={failValidation==='true'} placeholder="E-mail" fullWidth id="email" 
+                        InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline/></InputAdornment>),}}/>
                     </Item>
                     <Item>
-                        <TextField variant="outlined" error={failValidation==='true'} label="password" type="password" fullWidth id="password" 
-                        InputProps={{startAdornment: (<InputAdornment position="start"><LockOutlined /></InputAdornment>),}} />
+                        <TextField className="inputRounded" variant="outlined" error={failValidation==='true'} placeholder="Senha" type="password" fullWidth id="password" 
+                        InputProps={{startAdornment: (<InputAdornment position="start"><LockOutlined/></InputAdornment>),}} />
                     </Item>
                     <Item><Button color="secondary" size="large" variant = "contained" type="submit" >Entrar</Button></Item>
                 

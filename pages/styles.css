@@ -93696,4 +93696,8 @@ video {
   .xl\:animate-bounce {
     animation: bounce 1s infinite;
   }
+
+  .inputRounded .MuiOutlinedInput-root {
+    border-radius: 20px;
+  }
 }
