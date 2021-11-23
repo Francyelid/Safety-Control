@@ -93,7 +93,7 @@ const LoginPage = () => {
               <img
                 width = "auto"
                 height = "20%"
-                src = "https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/logo_white.png"/>
+                src = "https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/logo_purple.png"/>
 
                 
                 <Box boxShadow={20} borderRadius={2} padding="10px" style={{background:"#333333", display:"grid", gap:5, boxShadow:"2px 2px 5px #7E5095"}}>
