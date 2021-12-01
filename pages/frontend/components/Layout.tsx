@@ -264,15 +264,16 @@ const Layout = ({ children }) => {
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
       <BodyWrapper>
-        <Toolbar variant="dense" style={{ height:"10vh", background:"#7e5196"}}>
+        <Toolbar variant="dense" style={{ maxHeight:"10vh", minHeight:"8vh", background:"#7e5196"}}>
           <IconButton
             size="large"
             edge="start"
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={toggleDrawer(true)}
+            style={{maxHeight:"10vh", minHeight:"6vh", fontSize:"4vh", minWidth:"6vh", maxWidth:"10vh", width:"auto"}}
           >
-            <MenuIcon />
+            <MenuIcon style={{fontSize:"4vh"}}/>
           </IconButton>
 
           <Drawer
@@ -285,8 +286,7 @@ const Layout = ({ children }) => {
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} color="white">
             <img
-                width = "200"
-                height = "90%"
+                style= {{maxHeight:"10vh", minHeight:"6vh", width:"auto"}}
                 src = "https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/logo_white.png"/>
           </Typography>
           <Button
@@ -295,8 +295,9 @@ const Layout = ({ children }) => {
             aria-haspopup="true"
             aria-expanded={openProfile ? 'true' : undefined}
             onClick={handleClickProfile}
+            style={{maxHeight:"10vh", minHeight:"6vh", fontSize:"4vh", minWidth:"10vh", width:"auto"}}
           >
-            <Avatar>{(session && session.user)?  session.user.name[0].toUpperCase(): ""}</Avatar>
+            <Avatar style={{maxHeight:"10vh", minHeight:"6vh", fontSize:"4vh", minWidth:"10vh", width:"auto"}} >{(session && session.user)?  session.user.name[0].toUpperCase(): ""}</Avatar>
           </Button>
           
           <Menu
