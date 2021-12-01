@@ -10,6 +10,7 @@ import { renderers } from "react-markdown";
 import { CSVLink } from 'react-csv';
 import Combobox from '../components/Combobox';
 import { title } from 'process';
+import style from "../../../styles/login.module.css";
 
 import {Grid, Box, TextField, Button, Typography, BoxProps, InputAdornment } from '@material-ui/core';
 import { Description, DescriptionOutlined, DescriptionRounded, DescriptionTwoTone, UpdateOutlined } from '@material-ui/icons'
@@ -136,10 +137,10 @@ function Item(props: BoxProps) {
         <Grid container justifyContent="center" alignItems="flex-start" direction="column" spacing={5} style={{width:"100%",height:"100%", background:"#FFFFFF", 
                                                 backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/home_background.png)",
                                                 backgroundRepeat: 'no-repeat',
-                                                backgroundPosition: "100%",
-                                                marginLeft: "3%"}}>
+                                                backgroundPosition: "120%",
+                                                backgroundSize: "100% auto", marginRight: "10vh"}}>
             <Box sx={{display:'grid'}}>
-              <Box  sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', height:"100%", width:"100%"}}>
+              <Box  alignItems="center" sx={{display: 'grid',gap: 1,gridTemplateColumns: 'repeat(2, 1fr)', height:"40vh", width:"100%"}}>
                 <Item style={{height:"100%",  minWidth:"80%"}}>
                   <Chart 
                     height="35vh"
@@ -173,26 +174,26 @@ function Item(props: BoxProps) {
                   />
                 </Item>
               </Box>
-            </Box>
-            <Box sx={{display:'grid', marginLeft: "5%"}}>
-              <Box sx={{display:'grid', minWidth:"100%", gridTemplateColumns: 'repeat(1, 2fr)', marginTop:"5vh"}}>
+
+              <Box sx={{display:'grid', marginLeft:"15vh", width:"35vh", gridTemplateColumns: 'repeat(1, 2fr)', height:"20vh", marginTop:"5vh"}}>
                 <Item >
-                    <Button style={{height:"100%"}} fullWidth onClick={() => DataReturned()} color="secondary" size="large" variant = "contained" type="button" >
+                    <Button style={{height:"8vh"}} fullWidth onClick={() => DataReturned()} color="secondary" size="large" variant = "contained" type="button" >
                       <UpdateOutlined sx={{ fontSize: 40 }} name="update"  />
                     </Button>
                 </Item>
                 <Item >
-                    <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="secondary" size="large" variant = "contained" type="button" >
-                      <TextField label={"Detecções Ativas"} value={now} inputProps={{ readOnly: true }}></TextField>
+                    <Button style={{height:"8vh"}} fullWidth onClick={() => {}} color="secondary" size="large" variant = "contained" type="button" >
+                      <TextField label={"Detecções Ativas"} value={now} inputProps={{ readOnly: true }} className={style.textFieldHome}></TextField>
                     </Button>
                 </Item>
                 <Item >
-                    <Button style={{height:"100%"}} fullWidth onClick={() => {}} color="secondary" size="large" variant = "contained" type="button" >
-                    <TextField   label={"Detecções Recentes"} value={ocurred} inputProps={{ readOnly: true  }}></TextField>
+                    <Button style={{height:"8vh"}} fullWidth onClick={() => {}} color="secondary" size="large" variant = "contained" type="button" >
+                    <TextField label={"Detecções Recentes"} value={ocurred} inputProps={{ readOnly: true  }} className={style.textFieldHome}></TextField>
                     </Button>
                 </Item>
               </Box>
             </Box>
+            
         </Grid>
       </DashboardLayout>
     )

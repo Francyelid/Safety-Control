@@ -13,3 +13,15 @@
 .textFieldLogin > div > input{
     font-size: 1.5vh;
 }
+
+.textFieldHome{
+    height: 5vh;
+}
+
+.textFieldHome > div{
+    height: 5vh;
+}
+
+.textFieldHome > div > input{
+    font-size: 1.5vh;
+}
