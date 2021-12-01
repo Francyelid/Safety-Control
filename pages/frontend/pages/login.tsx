@@ -7,6 +7,7 @@ import { debug } from 'console';
 import { useSession, signIn, signOut } from "next-auth/client"
 import { useRouter} from 'next/router'
 import Link from 'next/link'
+import style from "../../../styles/login.module.css"
 
 const LoginPage = () => {
   const [loginError, setLoginError] = useState('');
@@ -35,12 +36,12 @@ const LoginPage = () => {
       <Box
         sx={{
           color: 'white',
-          p: 1,
-          m: 1,
+          padding: '1vh',
+          margin: '1vh',
           borderRadius: 1,
           textAlign: 'center',
-          fontSize: 19,
-          fontWeight: '700',
+          minHeight: '5vh',
+          maxHeight: '10vh', 
           ...sx,
         }}
         {...other}
@@ -83,31 +84,33 @@ const LoginPage = () => {
 
   return (
     <React.Fragment>
-      <Grid container justifyContent="center" alignItems="end" padding="20px" direction="column" spacing={5} style={{minHeight:"100vh", width:"100%", background:"#FFFFFF", 
+      <Grid container justifyContent="center" alignItems="end" padding="20px" direction="column" spacing={5} style={{minHeight:"100vh", background:"#FFFFFF", 
                                                                                                         backgroundImage: "url(https://github.com/Francyelid/Safety-Control/blob/main/pages/frontend/components/background/inital_background.png?raw=true)",
                                                                                                         backgroundRepeat: 'no-repeat',
-                                                                                                        backgroundPositionX: "0%"}}>
+                                                                                                        backgroundPositionX: "0%",
+                                                                                                        backgroundSize: "70%"}}>
 
-              <form onSubmit={handleSubmit}>
+              <form style={{height:"50vh", width:"50vw", display:"grid"}} onSubmit={handleSubmit}>
 
               <img
-                width = "auto"
-                height = "30%"
+                width = "50%"
+                height = "auto"
+                style={{justifySelf:"end"}}
                 src = "https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/logo_purple.png"/>
 
                 
-                <Box boxShadow={20} borderRadius={2} padding="10px" style={{background:"#333333", display:"grid", gap:5, boxShadow:"2px 2px 5px #7E5095"}}>
+                <Box boxShadow={20} borderRadius={2} style={{background:"#333333", display:"grid", gap:5, boxShadow:"2px 2px 5px #7E5095", width:"50%", justifySelf:"end"}}>
                   <Box  alignItems="center" sx={{ display: 'grid', gridTemplateRows: 'repeat(3, 1fr)'}}>
-                    <Item><Typography variant="h4" align="center">Login</Typography></Item>
+                    <Item><Typography variant="h4" fontSize="4vh" align="center">Login</Typography></Item>
                     <Item>
-                        <TextField style= {{ color : "pink"}} className="inputRounded" variant="outlined" error={failValidation==='true'} placeholder="E-mail" fullWidth id="email" 
-                        InputProps={{startAdornment: (<InputAdornment position="start"><MailOutline/></InputAdornment>),}}/>
+                        <TextField className={style.textFieldLogin} variant="outlined" error={failValidation==='true'} placeholder="E-mail" fullWidth id="email" 
+                        InputProps={{startAdornment: (<InputAdornment position="start" className={style.iconInput}><MailOutline/></InputAdornment>),}}/>
                     </Item>
                     <Item>
-                        <TextField className="inputRounded" variant="outlined" error={failValidation==='true'} placeholder="Senha" type="password" fullWidth id="password" 
-                        InputProps={{startAdornment: (<InputAdornment position="start"><LockOutlined/></InputAdornment>),}} />
+                        <TextField variant="outlined" className={style.textFieldLogin} error={failValidation==='true'} placeholder="Senha" type="password" fullWidth id="password" 
+                        InputProps={{startAdornment: (<InputAdornment position="start" className={style.iconInput}><LockOutlined/></InputAdornment>),}} />
                     </Item>
-                    <Item><Button color="secondary" size="large" variant = "contained" type="submit" >Entrar</Button></Item>
+                    <Item><Button style={{minHeight:"5vh", maxHeight:"8vh", minWidth:"10vw", fontSize:"1.5vh"}} color="secondary" size="large" variant = "contained" type="submit" >Entrar</Button></Item>
                 
                     {loginError && 
                     <Item><Typography paragraph align="center" color="error">{loginError}</Typography></Item>}

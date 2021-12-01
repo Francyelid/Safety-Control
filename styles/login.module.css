@@ -1,0 +1,15 @@
+.iconInput > svg{
+    font-size: 3vh;
+}
+
+.textFieldLogin{
+    height: 5vh;
+}
+
+.textFieldLogin > div{
+    height: 5vh;
+}
+
+.textFieldLogin > div > input{
+    font-size: 1.5vh;
+}

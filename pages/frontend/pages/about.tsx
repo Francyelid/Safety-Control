@@ -26,7 +26,7 @@ function Item(props: BoxProps) {
         p: 1,
         borderRadius: 1,
         textAlign: 'center',
-        fontSize: 19,
+        fontSize: '3vh',
         ...sx,
       }}
       {...other}
@@ -59,7 +59,8 @@ function Item(props: BoxProps) {
         <Grid container justifyContent="center" alignItems="center" direction="column" spacing={5} style={{width:"100%",height:"100%", background:"#FFFFFF",
           backgroundImage: "url(https://raw.githubusercontent.com/Francyelid/Safety-Control/main/pages/frontend/components/background/list_background.png)",
           backgroundRepeat: 'no-repeat',
-          backgroundPosition: "100%"}}>
+          backgroundPosition: "100%",
+          backgroundSize: "100% auto"}}>
             <Box sx={{display:'grid',  minWidth:"100%"}}>
                 <Item style={{minHeight:"100%",  minWidth:"100%"}}>
                   Sobre
